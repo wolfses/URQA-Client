@@ -8,13 +8,18 @@ public final class URQAController {
 
 	public static boolean Initialize(Context context, String APIKEY)
 	{
-		
 		return false;
+	}
+	
+	public static void StartSession(Context context)
+	{
+	}
+	public static void EndSession()
+	{
 	}
 	
 	public static void SendException(Exception e, String Tag, ErrorRank rank)
 	{
-		
 	}
 	
 	public static void SetLogCat(boolean toggleLog)
