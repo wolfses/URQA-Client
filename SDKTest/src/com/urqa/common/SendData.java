@@ -18,12 +18,18 @@ public class SendData {
 		ScreenHeight		= -1;
 		CallStackFileName 	= null;
 		LogFileName			= null;
-		
-		
-		
-		/*
-		이벤트 패스!
-		 */
+		BatteryLevel		= -1;
+		AvailSDCard			= -1;
+		CheckRoot			= false;
+		MemTotal			= -1;
+		MemFree				= -1;
+		MemMax				= -1;
+		LinuxKernelVersion	= "";
+		XDPI				= -1;
+		YDPI				= -1;
+		Orientation			= -1;
+		SysMemLow			= false;
+		//List<> EventPath
 	}
 	/**
 	 * 에러 발생 시간
