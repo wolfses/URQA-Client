@@ -1,4 +1,4 @@
-package com.urqa.common.eventpath;
+package com.urqa.eventpath;
 
 import java.util.ArrayList;
 import java.util.List;

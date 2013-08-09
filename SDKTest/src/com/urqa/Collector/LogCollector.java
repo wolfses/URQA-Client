@@ -5,18 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import com.urqa.common.StateData;
+
 import android.content.Context;
 import android.util.Log;
 
 public class LogCollector {
 	
-	public final static int 		LogLine 		= 100;
-	public final static boolean 	TransferLog 	= true;
-	public final static String 		LogFilter 		= "";
-	
 	public final static String getLog(Context context) {
 	    StringBuilder LOGCAT_CMD = new StringBuilder();
-	    LOGCAT_CMD.append("logcat").append("-d").append(LogFilter);
+	    LOGCAT_CMD.append("logcat").append("-d").append(StateData.LogFilter);
 	    
 	    Process logcatProc = null;
 	    
@@ -40,7 +38,7 @@ public class LogCollector {
 	        e.printStackTrace();
 	    }
 	    
-	    int LogLineStart = LogList.size() - LogLine;
+	    int LogLineStart = LogList.size() - StateData.LogLine;
 	    if(LogLineStart < 0)
 	    	LogLineStart = 0;
 	     

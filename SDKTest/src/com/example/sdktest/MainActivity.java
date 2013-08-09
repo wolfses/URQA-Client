@@ -2,6 +2,7 @@ package com.example.sdktest;
 
 import com.urqa.Collector.DeviceCollector;
 import com.urqa.Collector.LogCollector;
+import com.urqa.clientinterface.URQAController;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -14,7 +15,11 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        DeviceCollector co = new DeviceCollector(this);
+        
+        URQAController.InitializeAndStartSession(this, "123456");
+        
+        /*
+        DeviceCollector co = new DeviceCollector(senddata);
         
         boolean a = co.externalMemoryAvailable();
         
@@ -23,19 +28,20 @@ public class MainActivity extends Activity {
         
         long availin =  co.getAvailableInternalMemorySize();
         long totalin = co.getTotalInternalMemorySize();
-        int level = co.GetBatteryLevel(this);
+        int level = co.GetBatteryLevel(senddata);
         
         long totalm = co.GetTotalMemory();
         long freem = co.GetFreeMemory();
         long maxm = co.GetMaxMemory();
         
-        float xdpi = co.GetXDPI(this);
-        float ydpi = co.GetXDPI(this);
+        float xdpi = co.GetXDPI(senddata);
+        float ydpi = co.GetXDPI(senddata);
         String Kernel = co.GetLinuxKernelVersion();
         
         
         
         Log.i("asd",level +"%");
+        */
     }
 
     @Override
