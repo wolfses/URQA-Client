@@ -1,4 +1,4 @@
-package com.urqa.common.eventpath;
+package com.urqa.eventpath;
 
 public class EventPath {
 	
