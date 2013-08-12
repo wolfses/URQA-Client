@@ -2,32 +2,42 @@ package com.urqa.eventpath;
 
 public class EventPath {
 	
-	public EventPath(String className, String methodName, int line) {
+
+	public EventPath(String datetime, String classname, String methodname,
+			int linenum) {
 		super();
-		ClassName = className;
-		MethodName = methodName;
-		Line = line;
+		this.datetime = datetime;
+		this.classname = classname;
+		this.methodname = methodname;
+		this.linenum = linenum;
 	}
-	private String 	ClassName;
-	private String 	MethodName;
-	private int		Line;
+	private String  datetime;
+	private String 	classname;
+	private String 	methodname;
+	private int		linenum;
 	
 	public String getClassName() {
-		return ClassName;
+		return classname;
 	}
 	public void setClassName(String className) {
-		ClassName = className;
+		classname = className;
 	}
 	public String getMethodName() {
-		return MethodName;
+		return methodname;
 	}
 	public void setMethodName(String methodName) {
-		MethodName = methodName;
+		methodname = methodName;
 	}
 	public int getLine() {
-		return Line;
+		return linenum;
 	}
 	public void setLine(int line) {
-		Line = line;
+		this.linenum = line;
+	}
+	public String getDatetime() {
+		return datetime;
+	}
+	public void setDatetime(String datetime) {
+		this.datetime = datetime;
 	}
 }

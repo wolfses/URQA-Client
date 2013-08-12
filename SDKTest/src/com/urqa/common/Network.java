@@ -10,6 +10,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 
 
@@ -59,15 +61,22 @@ public class Network extends Thread {
 		try {
 			HttpClient client = new DefaultHttpClient();
 
+			client.getParams().setParameter("http.protocol.expect-continue", false);
+			client.getParams().setParameter("http.connection.timeout", 5000);
+			client.getParams().setParameter("http.socket.timeout", 5000);
+			
+			
 			HttpGet get = new HttpGet(URL);
 			HttpResponse responseGet = client.execute(get);
 			HttpEntity resEntityGet = responseGet.getEntity();
 
+			
 			if (resEntityGet != null) {
 				CallbackFunction(responseGet,resEntityGet);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.e("URQA", "Server Problem", e);
 		}
 	}
 	
@@ -77,9 +86,13 @@ public class Network extends Thread {
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(URL);
 
+			post.setHeader("Content-Type", "application/json; charset=utf-8");
 			
-			StringEntity input = new StringEntity(gson.toJson(Jsondata));
-			input.setContentType("application/json");
+			client.getParams().setParameter("http.protocol.expect-continue", false);
+			client.getParams().setParameter("http.connection.timeout", 5000);
+			client.getParams().setParameter("http.socket.timeout", 5000);
+			
+			StringEntity input = new StringEntity(gson.toJson(Jsondata),"UTF-8");
 
 			post.setEntity(input);
 			HttpResponse responsePOST = client.execute(post);
@@ -90,6 +103,7 @@ public class Network extends Thread {
 			CallbackFunction(responsePOST,resEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
+			Log.e("URQA", "Server Problem", e);
 		}
 	}
 

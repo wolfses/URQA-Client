@@ -1,23 +1,40 @@
 package com.urqa.clientinterface;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
+import com.urqa.Collector.CallStackCollector;
+import com.urqa.Collector.DateCollector;
+import com.urqa.Collector.DeviceCollector;
+import com.urqa.Collector.LogCollector;
+import com.urqa.common.CallStackData;
 import com.urqa.common.Network;
+import com.urqa.common.SendErrorProcess;
 import com.urqa.common.StateData;
+import com.urqa.common.JsonObj.ErrorSendData;
+import com.urqa.common.JsonObj.IDInstance;
+import com.urqa.common.JsonObj.IDSession;
+import com.urqa.common.JsonObj.SendAPIApp;
+import com.urqa.eventpath.EventPath;
 import com.urqa.eventpath.EventPathManager;
 import com.urqa.rank.ErrorRank;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.StrictMode;
 import android.util.Log;
 
@@ -28,18 +45,13 @@ public final class URQAController {
 	@SuppressLint("NewApi")
 	public static void InitializeAndStartSession(Context context, String APIKEY)
 	{
-		//test code 
-		
-		if (android.os.Build.VERSION.SDK_INT > 9) {
-		    StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-		    StrictMode.setThreadPolicy(policy);
-		}
 		if(StateData.FirstConnect)
 		{
 			StateData.AppContext 	= context;
 			StateData.FirstConnect 	= false;
 			StateData.APIKEY 		= APIKEY;
 
+			//Session 아이디 설정
 			class SessionID extends Network
 			{
 				@Override
@@ -55,14 +67,20 @@ public final class URQAController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					String sessionID = "";
-					StateData.SessionID =gson.fromJson(jsondata, String.class);
+					IDSession idsession =gson.fromJson(jsondata, IDSession.class);
+					StateData.SessionID = idsession.idsession;
 				}
 			}
+			
+			SendAPIApp sendAPIKEY = new SendAPIApp();
+			sendAPIKEY.apikey = StateData.APIKEY;
+			sendAPIKEY.appversion = DeviceCollector.GetAppVersion(context);
+			
 			SessionID getID = new SessionID();
-			getID.SetNetwork("http://172.16.100.67:9000/urqa/client/connect", "", Network.Networkformula.GET);
+			getID.SetNetwork(StateData.ServerAddress + "client/connect",
+							 sendAPIKEY, 
+							 Network.Networkformula.POST);
 			getID.start();
-
 		}
 		
 		StartActivity(context);
@@ -71,60 +89,84 @@ public final class URQAController {
 	{
 		//이벤트 패스 클리어
 		EventPathManager.ClearEvent();
+
+		
 	}
 	
 	public static void EndActivity(Context context)
 	{
 		//SendEvent
+		List<EventPath> SendEventdata =  EventPathManager.getEventPath();
+		
+		//없으면 보낼 필요 없지요...
+		if(SendEventdata.size() == 0 || StateData.SessionID == "")
+			return;
+		
+		
+		Network SendEventPath = new Network();
+		SendEventPath.SetNetwork(StateData.ServerAddress + "client/connect", 
+								 gson.toJson(SendEventdata), 
+								 Network.Networkformula.POST);
+		
 	}
 
-	class SendData
+	private static ErrorSendData CreateSendData(Exception e,String tag,ErrorRank rank ,Context context)
 	{
-		public String 	    sdkversion; 
-		public String 	    appversion;
-		public String 		osversion ;
-		public String 	    appmemmax ;
-		public String 	    appmemavail;
-		public String 	    appmemtotal;
-		public String 	    country;
-		public String 	    date;
-		public String 	    locale;
-		public String 	    mobileon;
-		public String 	    gpson;
-		public String 	    wifion ;
-		public String 	    device ;
-		public String 	    rooted ;
-		public String 	    scrheight;
-		public String 	    scrwidth ;
-		public String 	    srcorientation; 
-		public String 	    sysmemlow ;
-
+		ErrorSendData senddata = new ErrorSendData();
+		
+		String CallStack = CallStackCollector.GetCallStack(e);
+		CallStackData data = CallStackCollector.ParseStackTrace(e, CallStack);
+		
+		PackageManager packagemanager = context.getPackageManager();
+		PackageInfo packageinfo = null;
+		try {
+			packageinfo = packagemanager.getPackageInfo(context.getPackageName(), 0);
+		} catch (NameNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			return null;
+		}
+		
+		senddata.apikey 		= StateData.APIKEY;
+		senddata.datetime 		= DateCollector.GetDateYYMMDDHHMMSS(context);
+		senddata.device			= android.os.Build.MODEL;
+		senddata.country		= DeviceCollector.GetNational(context);
+		senddata.errorname		= data.ErrorName; 
+		senddata.errorclassname	= data.ClassName;
+		senddata.linenum		= data.Line;
+		senddata.callstack		= CallStack;
+		senddata.appversion		= packageinfo.versionName;
+		senddata.osversion		= android.os.Build.VERSION.RELEASE;
+		senddata.gpson			= (DeviceCollector.GetGps(context)) ? 1 : 0;
+		senddata.wifion			= (DeviceCollector.GetWiFiNetwork(context)) ? 1 : 0;
+		senddata.mobileon		= (DeviceCollector.GetMobileNetwork(context)) ? 1 : 0;
+		senddata.scrwidth		= DeviceCollector.GetWidthScreenSize(context);
+		senddata.scrheight		= DeviceCollector.GetHeightScreenSize(context);
+		senddata.batterylevel	= DeviceCollector.GetBatteryLevel(context);
+		senddata.availsdcard	= DeviceCollector.BytetoMegaByte(DeviceCollector.getAvailableExternalMemorySize());
+		senddata.rooted			= (DeviceCollector.CheckRoot()) ? 1 : 0;
+		senddata.appmemtotal	= DeviceCollector.BytetoMegaByte(DeviceCollector.GetTotalMemory());
+		senddata.appmemfree		= DeviceCollector.BytetoMegaByte(DeviceCollector.GetFreeMemory());
+		senddata.appmemmax		= DeviceCollector.BytetoMegaByte(DeviceCollector.GetMaxMemory());
+		senddata.kernelversion	= DeviceCollector.GetLinuxKernelVersion();
+		senddata.xdpi			= DeviceCollector.GetXDPI(context);
+		senddata.ydpi			= DeviceCollector.GetYDPI(context);
+		senddata.scrorientation = DeviceCollector.GetOrientation(context);
+		senddata.sysmemlow		= (DeviceCollector.GetSystemLowMemory()) ? 1 : 0;
+		senddata.tag			= tag;
+		senddata.rank			= rank.value();
+		senddata.eventpaths		= EventPathManager.GetErrorEventPath();
+		senddata.locale			= DeviceCollector.GetLocale(context);
+		
+		return senddata;
 	}
-
 	public static void SendException(Exception e, String Tag, ErrorRank rank)
 	{
-		//SendData senddata = new SendData();
-/*
-		senddata.sdkversion = 
-		senddata.appversion = 
-		senddata.osversion = osversion;
-		senddata.appmemmax = appmemmax;
-		senddata.appmemavail = appmemavail;
-		senddata.appmemtotal = appmemtotal;
-		senddata.country = country;
-		senddata.date = date;
-		senddata.locale = locale;
-		senddata.mobileon = mobileon;
-		senddata.gpson = gpson;
-		senddata.wifion = wifion;
-		senddata.device = device;
-		senddata.rooted = rooted;
-		senddata.scrheight = scrheight;
-		senddata.scrwidth = scrwidth;
-		senddata.srcorientation = srcorientation;
-		senddata.sysmemlow = sysmemlow;
-		*/
+		ErrorSendData sendData = CreateSendData(e,Tag,rank,StateData.AppContext);
+		String Log		= LogCollector.getLog(StateData.AppContext);
 		
+		SendErrorProcess errprocess = new SendErrorProcess(sendData,Log);
+		errprocess.start();
 	}
 	public static void SendException(Exception e)
 	{
@@ -242,7 +284,7 @@ public final class URQAController {
 	
 	private static int log(LogLevel level, String tag,String Msg, Throwable tr)
 	{
-		EventPathManager.CreateEventPath(2);
+		EventPathManager.CreateEventPath(3);
 		
 		if(StateData.ToggleLogCat)
 			return loglevel(level,tag,Msg,tr);

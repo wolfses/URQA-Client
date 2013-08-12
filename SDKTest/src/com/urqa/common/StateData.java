@@ -1,5 +1,7 @@
 package com.urqa.common;
 
+import com.urqa.eventpath.EventPath;
+
 import android.content.Context;
 
 public class StateData {
@@ -18,4 +20,8 @@ public class StateData {
 	public static int 		LogLine 		= 100;
 	public static boolean 	TransferLog 	= true;
 	public static String 	LogFilter 		= "";
+	
+	public static String	ServerAddress	= "http://172.16.100.67:9000/urqa/"; 
+	
+
 }

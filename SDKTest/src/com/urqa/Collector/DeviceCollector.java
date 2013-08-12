@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Environment;
 import android.os.StatFs;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.WindowManager;
 
@@ -29,43 +32,50 @@ public class DeviceCollector {
 		m_Context = context;
 	}
 
-	/**
-	 * 시스템 정보를 모은다.
-	 * @since 2012. 11. 12.오전 12:14:53
-	 * TODO
-	 * @author JeongSeungsu
-	 * @param OutPutData
-	 */
-	public void DoCollectSystemInfo(Context context) {
-/*		// TODO Auto-generated method stub
- 
-        PackageManager packagemanager = m_Context.getPackageManager();
-        try
-        {
-            PackageInfo packageinfo = packagemanager.getPackageInfo(m_Context.getPackageName(), 0);
-            
-            OutPutData.AppVersion 			= packageinfo.versionName;
-            //String APP_VERSIONCODE 		= String.valueOf(packageinfo.versionCode);
-            //String APP_PACKAGE 			= packageinfo.packageName;
-            OutPutData.MobileNetwork 		= Network.Get3GNetwork(m_Context);
-            OutPutData.WiFi			 		= Network.GetWiFiNetwork(m_Context);
-            OutPutData.National 			= GetNational(m_Context);
-            OutPutData.GPS					= GetGps(m_Context);
-            OutPutData.OSVersion			= android.os.Build.VERSION.RELEASE;
-            OutPutData.Model				= android.os.Build.MODEL;
-            OutPutData.ScreenHeight			= GetHeightScreenSize(m_Context);
-            OutPutData.ScreenWidth			= GetWidthScreenSize(m_Context);
-        }
-        catch(Exception e)
-        {
-        	e.printStackTrace();
-        }
-        */
-		
+
+	static public int BytetoMegaByte(Long Byte)
+	{
+		Long kb = Byte / 1024;
+		return (int) (kb / 1024);
 	}
 	
+	static private boolean GetNetwork(Context context,int Type){
+		boolean use = false;
+		try {
+			PackageManager packagemanager = context.getPackageManager();
+			if (packagemanager.checkPermission("android.permission.ACCESS_NETWORK_STATE",context.getPackageName()) == 0) {
+				ConnectivityManager manager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+				use = manager.getNetworkInfo(Type).isConnected();
+			}
+		} catch (Exception e) {
+			Log.e("LOGDOG", e.getMessage());
+		}
+		return use;
+	}
+	
+	
+	static public boolean GetMobileNetwork(Context context){
+		return GetNetwork(context,ConnectivityManager.TYPE_MOBILE);
+	}
 
-	public int GetBatteryLevel(Context context)
+	static public boolean GetWiFiNetwork(Context context){
+		return GetNetwork(context,ConnectivityManager.TYPE_WIFI);
+	}
+	
+	static public String GetAppVersion(Context context)
+	{
+		  PackageManager packagemanager = context.getPackageManager();
+		  try {
+			PackageInfo packageinfo = packagemanager.getPackageInfo(context.getPackageName(), 0);
+			return packageinfo.versionName;
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "unknown";
+		}
+	}
+
+	static public int GetBatteryLevel(Context context)
 	{
 		Intent bat = new Intent(); // 배터리 값을 받는 인텐트 변수 
 		int batLevel = 0; // 인텐트에서 배터리 값을 받는다. 
@@ -82,7 +92,7 @@ public class DeviceCollector {
 	 * @param context
 	 * @return 나라코드가 제대로 안될시 Unknown반환 아니면 kr 같은 나라코드 반환
 	 */
-	private String GetNational(Context context){
+	static public String GetNational(Context context){
 		Locale nowlocale = context.getResources( ).getConfiguration( ).locale;
 		String isNull = "";
 		if(isNull.equals(nowlocale.getCountry()))
@@ -98,7 +108,7 @@ public class DeviceCollector {
 	 * @param context
 	 * @return true 사용중 false 면 비사용
 	 */
-	private boolean GetGps(Context context) {
+	static public boolean GetGps(Context context) {
 		PackageManager packagemanager = context.getPackageManager();
 		if (packagemanager.checkPermission("android.permission.ACCESS_FINE_LOCATION",context.getPackageName()) == 0) {
 			LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -117,7 +127,7 @@ public class DeviceCollector {
 	 * @param context
 	 * @return 가로 스크린 크기
 	 */
-	private int GetWidthScreenSize(Context context){
+	static public int GetWidthScreenSize(Context context){
 		Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		return display.getWidth();
 	}
@@ -129,7 +139,7 @@ public class DeviceCollector {
 	 * @param context
 	 * @return 세로 스크린 크기
 	 */
-	private int GetHeightScreenSize(Context context){
+	static public int GetHeightScreenSize(Context context){
 		Display display = ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
 		return display.getHeight();
 	}
@@ -243,7 +253,18 @@ public class DeviceCollector {
     	((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(metrics);
         return metrics.ydpi;               // 해상도 
     }
+    static public String GetLocale(Context context)
+    {
+    	return context.getResources().getConfiguration().locale.getDisplayLanguage();
+    }
     
+    /**
+     *
+     * @since 2013. 8. 12.오후 7:41:37
+     * @author JeongSeungsu
+     * @param context
+     * @return 0 세로 1 가로
+     */
     static public int GetOrientation(Context context)
     {
     	return ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
