@@ -13,12 +13,29 @@ import android.view.Menu;
 
 public class MainActivity extends Activity {
 
-	
+    static {
+ 	   System.loadLibrary("csourcep");
+ 	 }
+    
+    private native String invokeNativeFunction();
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+    
+        try{
+        	String a = invokeNativeFunction();
+        }
+        catch(Throwable e)
+        {
+        	Log.d("zzz","이야~~~~~~");
+        	e.printStackTrace();
+        }
+
+
+        /*
         URQAController.InitializeAndStartSession(this, "12312312");
         
         
@@ -35,30 +52,6 @@ public class MainActivity extends Activity {
         {
         	URQAController.SendException(e,"testtag",ErrorRank.Critical);
         }
-        
-        /*
-        DeviceCollector co = new DeviceCollector(senddata);
-        
-        boolean a = co.externalMemoryAvailable();
-        
-        long availex = co.getAvailableExternalMemorySize();
-        long totalex = co.getTotalExternalMemorySize();
-        
-        long availin =  co.getAvailableInternalMemorySize();
-        long totalin = co.getTotalInternalMemorySize();
-        int level = co.GetBatteryLevel(senddata);
-        
-        long totalm = co.GetTotalMemory();
-        long freem = co.GetFreeMemory();
-        long maxm = co.GetMaxMemory();
-        
-        float xdpi = co.GetXDPI(senddata);
-        float ydpi = co.GetXDPI(senddata);
-        String Kernel = co.GetLinuxKernelVersion();
-        
-        
-        
-        Log.i("asd",level +"%");
         */
     }
 
