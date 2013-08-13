@@ -12,18 +12,19 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
 import com.google.gson.Gson;
+import com.urqa.Collector.ErrorReport;
 import com.urqa.common.JsonObj.ErrorSendData;
 import com.urqa.common.JsonObj.IDInstance;
 
 public class SendErrorProcess extends Thread{
-	private ErrorSendData errordata;
-	String 		  log;
+	private ErrorReport			   report;
+	private String 		   		   url;
 	
-	public SendErrorProcess(ErrorSendData data, String log) 
+	public SendErrorProcess(ErrorReport report,String url) 
 	{
 		// TODO Auto-generated constructor stub
-		errordata = data;
-		this.log = log;
+		this.report = report; 
+		this.url = url;
 	}
 	
 	@Override
@@ -33,14 +34,14 @@ public class SendErrorProcess extends Thread{
 			Gson gson = new Gson();
 			
 			HttpClient client = new DefaultHttpClient();
-			HttpPost post = new HttpPost(StateData.ServerAddress + "client/send/exception");
+			HttpPost post = new HttpPost(StateData.ServerAddress + url);
 			
 			post.setHeader("Content-Type", "application/json; charset=utf-8");
 			client.getParams().setParameter("http.protocol.expect-continue", false);
 			client.getParams().setParameter("http.connection.timeout", 5000);
 			client.getParams().setParameter("http.socket.timeout", 5000);
 			
-			String test = gson.toJson(errordata);
+			String test = gson.toJson(report.ErrorData);
 			StringEntity input = new StringEntity(test,"UTF-8");
 
 			post.setEntity(input);
@@ -75,7 +76,7 @@ public class SendErrorProcess extends Thread{
 			   
 			   // 1. 파일의 내용을 body 로 설정함 
 			   logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
-			   StringEntity entity = new StringEntity(log, "UTF-8");
+			   StringEntity entity = new StringEntity(report.LogData, "UTF-8");
 			   logpost.setEntity(entity);
 			   
 			   
