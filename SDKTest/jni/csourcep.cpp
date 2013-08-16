@@ -3,27 +3,25 @@
 #include <android/log.h>
 #include <stdio.h>
 
-#include "JavaCatchHeader.h"
+//#include "JavaCatchHeader.h"
+#include "src/urqa.h"
+
+void Crash() {
+  volatile int* a = reinterpret_cast<volatile int*>(NULL);
+  *a = 1;
+}
 
   
- extern "C" {
-JNIEXPORT jstring Java_com_example_sdktest_MainActivity_invokeNativeFunction(JNIEnv* env, jobject javaThis) {
-	__android_log_print(ANDROID_LOG_FATAL, "zzz", "start");
-	
+extern "C" {
+	JNIEXPORT jstring Java_com_example_sdktest_MainActivity_invokeNativeFunction(JNIEnv* env, jobject javaThis) {
+		__android_log_print(ANDROID_LOG_FATAL, "zzz", "start");
 
-  
-	try{
-		__android_log_print(ANDROID_LOG_FATAL, "zzz", "start2");
-		throw new std::bad_alloc();
+		UrqaNative::URQAIntialize();
+
+		Crash();
+		return env->NewStringUTF("Hello from C Code!");
 	}
-	CATCH_CPP_EXCEPTION_AND_THROW_JAVA_EXCEPTION
-	
-	__android_log_print(ANDROID_LOG_FATAL, "zzz", "start3");
-	
-    return env->NewStringUTF("Hello from C Code!");
 }
-}
-
 
 
 
