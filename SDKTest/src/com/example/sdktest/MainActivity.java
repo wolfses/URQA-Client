@@ -30,7 +30,7 @@ public class MainActivity extends Activity {
         }
         catch(Throwable e)
         {
-        	Log.d("zzz","이야~~~~~~");
+        	Log.d("zzz","�댁빞~~~~~~");
         	e.printStackTrace();
         }
 
