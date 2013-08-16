@@ -36,6 +36,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
+#include <android/log.h>
 
 #include "client/minidump_file_writer-inl.h"
 #include "common/linux/linux_libc_support.h"
@@ -61,6 +62,9 @@ MinidumpFileWriter::~MinidumpFileWriter() {
 }
 
 bool MinidumpFileWriter::Open(const char *path) {
+
+  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Open");
+
   assert(file_ == -1);
 #if __linux__
   file_ = sys_open(path, O_WRONLY | O_CREAT | O_EXCL, 0600);
@@ -72,12 +76,15 @@ bool MinidumpFileWriter::Open(const char *path) {
 }
 
 void MinidumpFileWriter::SetFile(const int file) {
+  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_SetFile");
   assert(file_ == -1);
   file_ = file;
   close_file_when_destroyed_ = false;
 }
 
 bool MinidumpFileWriter::Close() {
+
+  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Close");
   bool result = true;
 
   if (file_ != -1) {
@@ -202,6 +209,9 @@ bool MinidumpFileWriter::WriteString(const char *str, unsigned int length,
 
 bool MinidumpFileWriter::WriteMemory(const void *src, size_t size,
                                      MDMemoryDescriptor *output) {
+
+  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_WriteMemory");
+
   assert(src);
   assert(output);
   UntypedMDRVA mem(this);
@@ -218,7 +228,8 @@ bool MinidumpFileWriter::WriteMemory(const void *src, size_t size,
 }
 
 MDRVA MinidumpFileWriter::Allocate(size_t size) {
-  assert(size);
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Allocate");
+	assert(size);
   assert(file_ != -1);
   size_t aligned_size = (size + 7) & ~7;  // 64-bit alignment
 
@@ -244,7 +255,8 @@ MDRVA MinidumpFileWriter::Allocate(size_t size) {
 }
 
 bool MinidumpFileWriter::Copy(MDRVA position, const void *src, ssize_t size) {
-  assert(src);
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Copy");
+	assert(src);
   assert(size);
   assert(file_ != -1);
 
