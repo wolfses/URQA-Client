@@ -25,7 +25,7 @@ void UrqaNative::URQAIntialize(JNIEnv *env)
 {
 	jEnv = env;
 	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "IntializeURQANative");
-	google_breakpad::MinidumpDescriptor descriptor(".");
+	google_breakpad::MinidumpDescriptor descriptor("/storage/sdcard0");
 	static google_breakpad::ExceptionHandler eh(descriptor, NULL, UrqaNative::DumpCallback,NULL, true, -1);
 
 	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "IntializeURQANativeSuccess");

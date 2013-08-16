@@ -72,24 +72,24 @@ public:
   static const MDRVA kInvalidMDRVA;
 
   MinidumpFileWriter();
-  ~MinidumpFileWriter();
+  virtual ~MinidumpFileWriter();
 
   // Open |path| as the destination of the minidump data.  Any existing file
   // will be overwritten.
   // Return true on success, or false on failure.
-  bool Open(const char *path);
+  virtual bool Open(const char *path);
 
   // Sets the file descriptor |file| as the destination of the minidump data.
   // Can be used as an alternative to Open() when a file descriptor is
   // available.
   // Note that |fd| is not closed when the instance of MinidumpFileWriter is
   // destroyed.
-  void SetFile(const int file);
+  virtual void SetFile(const int file);
 
   // Close the current file (that was either created when Open was called, or
   // specified with SetFile).
   // Return true on success, or false on failure.
-  bool Close();
+  virtual bool Close();
 
   // Copy the contents of |str| to a MDString and write it to the file.
   // |str| is expected to be either UTF-16 or UTF-32 depending on the size
@@ -98,26 +98,46 @@ public:
   // entire NULL terminated string.  Copying will stop at the first NULL.
   // |location| the allocated location
   // Return true on success, or false on failure
-  bool WriteString(const wchar_t *str, unsigned int length,
+  virtual bool WriteString(const wchar_t *str, unsigned int length,
                    MDLocationDescriptor *location);
 
   // Same as above, except with |str| as a UTF-8 string
-  bool WriteString(const char *str, unsigned int length,
+  virtual bool WriteString(const char *str, unsigned int length,
                    MDLocationDescriptor *location);
 
   // Write |size| bytes starting at |src| into the current position.
   // Return true on success and set |output| to position, or false on failure
-  bool WriteMemory(const void *src, size_t size, MDMemoryDescriptor *output);
+  virtual bool WriteMemory(const void *src, size_t size, MDMemoryDescriptor *output);
 
   // Copies |size| bytes from |src| to |position|
   // Return true on success, or false on failure
-  bool Copy(MDRVA position, const void *src, ssize_t size);
+  virtual bool Copy(MDRVA position, const void *src, ssize_t size);
 
   // Return the current position for writing to the minidump
   inline MDRVA position() const { return position_; }
 
+  // Current position in buffer
+   MDRVA position_;
+
+   friend class UntypedMDRVA;
+
+   // Copy |length| characters from |str| to |mdstring|.  These are distinct
+   // because the underlying MDString is a UTF-16 based string.  The wchar_t
+   // variant may need to create a MDString that has more characters than the
+   // source |str|, whereas the UTF-8 variant may coalesce characters to form
+   // a single UTF-16 character.
+   bool CopyStringToMDString(const wchar_t *str, unsigned int length,
+                             TypedMDRVA<MDString> *mdstring);
+   bool CopyStringToMDString(const char *str, unsigned int length,
+                             TypedMDRVA<MDString> *mdstring);
+
+   // The common templated code for writing a string
+   template <typename CharType>
+   bool WriteStringCore(const CharType *str, unsigned int length,
+                        MDLocationDescriptor *location);
+
  private:
-  friend class UntypedMDRVA;
+
 
   // Allocates an area of |size| bytes.
   // Returns the position of the allocation, or kInvalidMDRVA if it was
@@ -130,26 +150,9 @@ public:
   // Whether |file_| should be closed when the instance is destroyed.
   bool close_file_when_destroyed_;
 
-  // Current position in buffer
-  MDRVA position_;
-
   // Current allocated size
   size_t size_;
 
-  // Copy |length| characters from |str| to |mdstring|.  These are distinct
-  // because the underlying MDString is a UTF-16 based string.  The wchar_t
-  // variant may need to create a MDString that has more characters than the
-  // source |str|, whereas the UTF-8 variant may coalesce characters to form
-  // a single UTF-16 character.
-  bool CopyStringToMDString(const wchar_t *str, unsigned int length,
-                            TypedMDRVA<MDString> *mdstring);
-  bool CopyStringToMDString(const char *str, unsigned int length,
-                            TypedMDRVA<MDString> *mdstring);
-
-  // The common templated code for writing a string
-  template <typename CharType>
-  bool WriteStringCore(const CharType *str, unsigned int length,
-                       MDLocationDescriptor *location);
 };
 
 // Represents an untyped allocated chunk
