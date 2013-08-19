@@ -36,6 +36,9 @@
 
 #include <assert.h>
 
+//#include <android/log.h>
+//__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "SETFILE 언제들오나 보자");
+
 #include "client/minidump_file_writer.h"
 #include "google_breakpad/common/minidump_size.h"
 

@@ -1,5 +1,7 @@
 package com.example.urqanative;
 
+import com.urqa.clientinterface.URQAController;
+
 import android.os.Bundle;
 import android.app.Activity;
 import android.util.Log;
@@ -17,6 +19,7 @@ public class MainActivity extends Activity {
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
+         URQAController.InitializeAndStartSession(this, "12312312");
      
          try{
          	String a = invokeNativeFunction();

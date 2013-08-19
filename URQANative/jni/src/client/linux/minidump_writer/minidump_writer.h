@@ -39,6 +39,7 @@
 
 #include "client/linux/minidump_writer/linux_dumper.h"
 #include "google_breakpad/common/minidump_format.h"
+#include "minidump_memory_writer.h"
 
 namespace google_breakpad {
 

@@ -57,13 +57,15 @@ MinidumpFileWriter::MinidumpFileWriter()
 }
 
 MinidumpFileWriter::~MinidumpFileWriter() {
-  if (close_file_when_destroyed_)
-    Close();
-}
+  if (close_file_when_destroyed_)  {
+	  Close();
+   }
+  }
+
 
 bool MinidumpFileWriter::Open(const char *path) {
 
-  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Open");
+  //__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Open");
 
   assert(file_ == -1);
 #if __linux__
@@ -76,7 +78,7 @@ bool MinidumpFileWriter::Open(const char *path) {
 }
 
 void MinidumpFileWriter::SetFile(const int file) {
-  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_SetFile");
+  //__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_SetFile");
   assert(file_ == -1);
   file_ = file;
   close_file_when_destroyed_ = false;
@@ -84,7 +86,7 @@ void MinidumpFileWriter::SetFile(const int file) {
 
 bool MinidumpFileWriter::Close() {
 
-  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Close");
+ // __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Close");
   bool result = true;
 
   if (file_ != -1) {
@@ -210,7 +212,7 @@ bool MinidumpFileWriter::WriteString(const char *str, unsigned int length,
 bool MinidumpFileWriter::WriteMemory(const void *src, size_t size,
                                      MDMemoryDescriptor *output) {
 
-  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_WriteMemory");
+//  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_WriteMemory");
 
   assert(src);
   assert(output);
@@ -218,6 +220,8 @@ bool MinidumpFileWriter::WriteMemory(const void *src, size_t size,
 
   if (!mem.Allocate(size))
     return false;
+
+  //__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "WriteMemory Size : %d", mem.size());
   if (!mem.Copy(src, mem.size()))
     return false;
 
@@ -228,7 +232,7 @@ bool MinidumpFileWriter::WriteMemory(const void *src, size_t size,
 }
 
 MDRVA MinidumpFileWriter::Allocate(size_t size) {
-	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Allocate");
+	//__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Allocate");
 	assert(size);
   assert(file_ != -1);
   size_t aligned_size = (size + 7) & ~7;  // 64-bit alignment
@@ -245,6 +249,7 @@ MDRVA MinidumpFileWriter::Allocate(size_t size) {
     if (ftruncate(file_, new_size) != 0)
       return kInvalidMDRVA;
 
+    //__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "Allocate_Size : %d", new_size);
     size_ = new_size;
   }
 
@@ -255,7 +260,7 @@ MDRVA MinidumpFileWriter::Allocate(size_t size) {
 }
 
 bool MinidumpFileWriter::Copy(MDRVA position, const void *src, ssize_t size) {
-	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Copy");
+	//__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "File_Writer_Copy");
 	assert(src);
   assert(size);
   assert(file_ != -1);
@@ -263,6 +268,8 @@ bool MinidumpFileWriter::Copy(MDRVA position, const void *src, ssize_t size) {
   // Ensure that the data will fit in the allocated space
   if (static_cast<size_t>(size + position) > size_)
     return false;
+
+  //__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "Copy_Size : %d", size);
 
   // Seek and write the data
 #if __linux__
