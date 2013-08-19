@@ -23,6 +23,7 @@ import com.urqa.Collector.LogCollector;
 import com.urqa.common.CallStackData;
 import com.urqa.common.Network;
 import com.urqa.common.SendErrorProcess;
+import com.urqa.common.SendErrorProcessURLConnection;
 import com.urqa.common.StateData;
 import com.urqa.common.JsonObj.ErrorSendData;
 import com.urqa.common.JsonObj.IDInstance;
@@ -44,9 +45,28 @@ public final class URQAController {
 	
 	private static final Gson gson = new Gson();
 	
-	public static void NativeCrashCallback(String str)
+	public static int NativeCrashCallback(String str)
 	{
-		Log.e("URQATEST","value : " + str);
+		
+		Log.e("URQATEST","Dump Path : " + str);
+		ErrorReport report = ErrorReportFactory.CreateNativeErrorReport(StateData.AppContext);
+		
+		Log.e("URQATEST","여기까지 옴");
+		SendErrorProcessURLConnection errprocess = new SendErrorProcessURLConnection(report, "client/send/exception/native",str);
+		Log.e("URQATEST","여기까지 옴1");
+		errprocess.start();
+		Log.e("URQATEST","여기까지 옴2");
+		
+		try {
+			errprocess.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//Log.e("URQATEST","value : " + str);
+		Log.e("URQATEST","여기까지 옴3");
+		
+		return 0;
 	}
 	
 	@SuppressLint("NewApi")

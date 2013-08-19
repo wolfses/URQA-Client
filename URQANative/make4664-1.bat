@@ -1,0 +1,2 @@
+@echo off
+E:/Users/JeongSeungsu/Desktop/android/eclipse_skd_ndk/android-ndk-r9/prebuilt/windows-x86_64/bin/echo.exe "directory E:/Users/JeongSeungsu/Desktop/android/eclipse_skd_ndk/android-ndk-r9/platforms/android-18/arch-arm/usr/include jni/src/common/android/include jni/android/google_breakpad/../../src/common/android/include E:/Users/JeongSeungsu/Desktop/android/eclipse_skd_ndk/android-ndk-r9/sources/cxx-stl/stlport/stlport E:/Users/JeongSeungsu/Desktop/android/eclipse_skd_ndk/android-ndk-r9/sources/cxx-stl//gabi++/include" >> ./libs/armeabi/gdb.setup

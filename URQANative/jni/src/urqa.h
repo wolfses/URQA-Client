@@ -27,7 +27,7 @@ public:
 								void* context,
 								bool succeeded);
 
-	static void JavaCallTest();
+	static void JavaCallTest(const char* path);
 };
 
 

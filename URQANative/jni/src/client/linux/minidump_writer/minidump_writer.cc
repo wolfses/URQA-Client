@@ -1645,7 +1645,10 @@ class MinidumpWriter {
   const struct ucontext* const ucontext_;  // also from the signal handler
   const struct _libc_fpstate* const float_state_;  // ditto
   LinuxDumper* dumper_;
+  //Memory Dump 수정...
   MinidumpFileWriter minidump_writer_;
+  //MinidumpMemoryWriter minidump_writer_;
+
   off_t minidump_size_limit_;
   MDLocationDescriptor crashing_thread_context_;
   // Blocks of memory written to the dump. These are all currently
