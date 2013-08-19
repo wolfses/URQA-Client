@@ -44,94 +44,91 @@ public class SendErrorProcessURLConnection extends Thread{
 	{
 		IDInstance idinstance = null;
 
-			
-			
+		try {
+			Gson gson = new Gson();
+
+			HttpClient client = new DefaultHttpClient();
+			String nativeurl = StateData.ServerAddress + url;
+			HttpPost post = new HttpPost(nativeurl);
+
+			post.setHeader("Content-Type", "application/json; charset=utf-8");
+			client.getParams().setParameter("http.protocol.expect-continue",
+					false);
+			client.getParams().setParameter("http.connection.timeout", 5000);
+			client.getParams().setParameter("http.socket.timeout", 5000);
+
+			String test = gson.toJson(report.ErrorData);
+			StringEntity input = new StringEntity(test, "UTF-8");
+
+			post.setEntity(input);
+			HttpResponse responsePOST = client.execute(post);
+			HttpEntity resEntity = responsePOST.getEntity();
+
+			if (StateData.TransferLog == false)
+				return;
+
+			String jsondata = "";
 			try {
-				Gson gson = new Gson();
-				
-				HttpClient client = new DefaultHttpClient();
-				String nativeurl = StateData.ServerAddress + url;
-				HttpPost post = new HttpPost(nativeurl);
-				
-				post.setHeader("Content-Type", "application/json; charset=utf-8");
-				client.getParams().setParameter("http.protocol.expect-continue", false);
-				client.getParams().setParameter("http.connection.timeout", 5000);
-				client.getParams().setParameter("http.socket.timeout", 5000);
-				
-				String test = gson.toJson(report.ErrorData);
-				StringEntity input = new StringEntity(test,"UTF-8");
+				jsondata = EntityUtils.toString(resEntity);
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			idinstance = gson.fromJson(jsondata, IDInstance.class);
 
-				post.setEntity(input);
-				HttpResponse responsePOST = client.execute(post);
-				HttpEntity resEntity = responsePOST.getEntity();
-				
-				if(StateData.TransferLog == false)
-					return;
+			try {
+				HttpClient logclient = new DefaultHttpClient();
 
-				String jsondata = "";
-				try {
-					jsondata = EntityUtils.toString(resEntity);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				 idinstance =gson.fromJson(jsondata, IDInstance.class);
+				HttpPost logpost = new HttpPost(StateData.ServerAddress
+						+ "client/send/exception/log/" + idinstance.idinstance);
 
-				try {
-				   HttpClient logclient = new DefaultHttpClient();
-				   
-				   HttpPost logpost = new HttpPost( StateData.ServerAddress + 
-						   							"client/send/exception/log/"+ 
-						   							idinstance.idinstance);
+				logclient.getParams().setParameter(
+						"http.protocol.expect-continue", false);
+				logclient.getParams().setParameter("http.connection.timeout",
+						5000);
+				logclient.getParams().setParameter("http.socket.timeout", 5000);
 
-				   logclient.getParams().setParameter("http.protocol.expect-continue", false);
-				   logclient.getParams().setParameter("http.connection.timeout", 5000);
-				   logclient.getParams().setParameter("http.socket.timeout", 5000);
-				   
-				   // 1. 파일의 내용을 body 로 설정함 
-				   logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
-				   StringEntity entity = new StringEntity(report.LogData, "UTF-8");
-				   logpost.setEntity(entity);
-				   
-				   
-				   HttpResponse response = logclient.execute(logpost);
-				  } catch (Exception e) {
-						e.printStackTrace();
-					}
-						
+				// 1. 파일의 내용을 body 로 설정함
+				logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
+				StringEntity entity = new StringEntity(report.LogData, "UTF-8");
+				logpost.setEntity(entity);
+
+				HttpResponse response = logclient.execute(logpost);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
-			
-			
-			
-			
-			try {
-				   HttpClient dumpclient = new DefaultHttpClient();
-				   
-				   HttpPost dumppost = new HttpPost( StateData.ServerAddress + 
-						   							"client/send/exception/dump/"+ 
-						   							idinstance.idinstance);
 
-				   dumpclient.getParams().setParameter("http.protocol.expect-continue", false);
-				   dumpclient.getParams().setParameter("http.connection.timeout", 5000);
-				   dumpclient.getParams().setParameter("http.socket.timeout", 5000);
-				   
-				   // 1. 파일의 내용을 body 로 설정함 
-				   dumppost.setHeader("Content-Type", "multipart/form-data; charset=utf-8");
-				   File file = new File(filename);
-				   FileEntity entity = new FileEntity(file,"multipart/form-data");
-				   dumppost.setEntity(entity);
-				   
-				   
-				   HttpResponse response = dumpclient.execute(dumppost);
-				  } catch (Exception e) {
-						e.printStackTrace();
-					}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//dump 보내기 
+		try {
+			HttpClient dumpclient = new DefaultHttpClient();
+
+			HttpPost dumppost = new HttpPost(StateData.ServerAddress
+					+ "client/send/exception/dump/" + idinstance.idinstance);
+
+			dumpclient.getParams().setParameter(
+					"http.protocol.expect-continue", false);
+			dumpclient.getParams()
+					.setParameter("http.connection.timeout", 5000);
+			dumpclient.getParams().setParameter("http.socket.timeout", 5000);
+
+			// 1. 파일의 내용을 body 로 설정함
+			dumppost.setHeader("Content-Type",
+					"multipart/form-data; charset=utf-8");
+			File file = new File(filename);
+			FileEntity entity = new FileEntity(file, "multipart/form-data");
+			dumppost.setEntity(entity);
+
+			HttpResponse response = dumpclient.execute(dumppost);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 	}
 
