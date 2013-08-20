@@ -37,10 +37,10 @@ LOCAL_DEFAULT_CPP_EXTENSION := cc
 LOCAL_MODULE := csourcep
 LOCAL_SRC_FILES := csourcep.cc
 LOCAL_STATIC_LIBRARIES += urqanative
-LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog \
+#LOCAL_LDLIBS := -L$(SYSROOT)/usr/lib -llog \
 
-LOCAL_C_INCLUDES        := $(LOCAL_PATH)/src/common/android/include \
-                           $(LOCAL_PATH)/src
+LOCAL_C_INCLUDES        := $(LOCAL_PATH)/header/common/android/include \
+                           $(LOCAL_PATH)/header
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)   
  

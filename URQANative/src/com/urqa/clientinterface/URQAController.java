@@ -32,6 +32,7 @@ import com.urqa.common.JsonObj.IDSession;
 import com.urqa.common.JsonObj.SendAPIApp;
 import com.urqa.eventpath.EventPath;
 import com.urqa.eventpath.EventPathManager;
+import com.urqa.exceptionhandler.ExceptionHandler;
 import com.urqa.rank.ErrorRank;
 
 import android.annotation.SuppressLint;
@@ -46,7 +47,7 @@ public final class URQAController {
 	
 	private static final Gson gson = new Gson();
 	
-	
+	private static ExceptionHandler handler = null;
 	
 	public static int NativeCrashCallback(String str)
 	{
@@ -77,6 +78,8 @@ public final class URQAController {
 			StateData.FirstConnect 	= false;
 			StateData.APIKEY 		= APIKEY;
 
+			handler = new ExceptionHandler();
+			
 			//Session 아이디 설정
 			class SessionID extends Network
 			{
@@ -107,6 +110,8 @@ public final class URQAController {
 							 sendAPIKEY, 
 							 Network.Networkformula.POST);
 			getID.start();
+			
+			
 		}
 		
 		StartActivity(context);

@@ -75,31 +75,31 @@ LOCAL_ARM_MODE := arm
 
 # List of client source files, directly taken from Makefile.am
 LOCAL_SRC_FILES := \
-    src/client/linux/crash_generation/crash_generation_client.cc \
-    src/client/linux/handler/exception_handler.cc \
-    src/client/linux/handler/minidump_descriptor.cc \
-    src/client/linux/log/log.cc \
-    src/client/linux/minidump_writer/linux_dumper.cc \
-    src/client/linux/minidump_writer/linux_ptrace_dumper.cc \
-    src/client/linux/minidump_writer/minidump_writer.cc \
-    src/client/minidump_file_writer.cc \
-    src/common/android/breakpad_getcontext.S \
-    src/common/convert_UTF.c \
-    src/common/md5.cc src/common/string_conversion.cc \
-    src/common/linux/elfutils.cc \
-    src/common/linux/file_id.cc \
-    src/common/linux/guid_creator.cc \
-    src/common/linux/linux_libc_support.cc \
-    src/common/linux/memory_mapped_file.cc \
-    src/common/linux/safe_readlink.cc \
-    src/urqa.cc \
-    src/minidump_memory_writer.cc
+    header/client/linux/crash_generation/crash_generation_client.cc \
+    header/client/linux/handler/exception_handler.cc \
+    header/client/linux/handler/minidump_descriptor.cc \
+    header/client/linux/log/log.cc \
+    header/client/linux/minidump_writer/linux_dumper.cc \
+    header/client/linux/minidump_writer/linux_ptrace_dumper.cc \
+    header/client/linux/minidump_writer/minidump_writer.cc \
+    header/client/minidump_file_writer.cc \
+    header/common/android/breakpad_getcontext.S \
+    header/common/convert_UTF.c \
+    header/common/md5.cc header/common/string_conversion.cc \
+    header/common/linux/elfutils.cc \
+    header/common/linux/file_id.cc \
+    header/common/linux/guid_creator.cc \
+    header/common/linux/linux_libc_support.cc \
+    header/common/linux/memory_mapped_file.cc \
+    header/common/linux/safe_readlink.cc \
+    header/urqa.cc \
+    header/minidump_memory_writer.cc
 
-LOCAL_C_INCLUDES        := $(LOCAL_PATH)/src/common/android/include \
-                           $(LOCAL_PATH)/src
+LOCAL_C_INCLUDES        := $(LOCAL_PATH)/header/common/android/include \
+                           $(LOCAL_PATH)/header
 
 LOCAL_EXPORT_C_INCLUDES := $(LOCAL_C_INCLUDES)
-LOCAL_EXPORT_LDLIBS     := -L$(SYSROOT)/usr/lib -llog
+LOCAL_EXPORT_LDLIBS     := -llog
 
 include $(BUILD_STATIC_LIBRARY)
 
