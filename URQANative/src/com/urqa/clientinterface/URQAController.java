@@ -1,5 +1,6 @@
 package com.urqa.clientinterface;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -45,18 +46,17 @@ public final class URQAController {
 	
 	private static final Gson gson = new Gson();
 	
+	
+	
 	public static int NativeCrashCallback(String str)
 	{
 		
 		Log.e("URQATEST","Dump Path : " + str);
 		ErrorReport report = ErrorReportFactory.CreateNativeErrorReport(StateData.AppContext);
 		
-		Log.e("URQATEST","여기까지 옴");
 		SendErrorProcessURLConnection errprocess = new SendErrorProcessURLConnection(report, "client/send/exception/native",str);
-		Log.e("URQATEST","여기까지 옴1");
 		errprocess.start();
-		Log.e("URQATEST","여기까지 옴2");
-		
+				
 		try {
 			errprocess.join();
 		} catch (InterruptedException e) {
@@ -64,8 +64,7 @@ public final class URQAController {
 			e.printStackTrace();
 		}
 		//Log.e("URQATEST","value : " + str);
-		Log.e("URQATEST","여기까지 옴3");
-		
+				
 		return 0;
 	}
 	
@@ -267,5 +266,10 @@ public final class URQAController {
 		else
 			return 0;
 	}
-	
+
+	private static String GetCachePath()
+	{
+		File cachefile = StateData.AppContext.getCacheDir();
+		return cachefile.getAbsolutePath();
+	}
 }

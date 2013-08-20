@@ -18,6 +18,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.urqa.Collector.ErrorReport;
 import com.urqa.common.JsonObj.IDInstance;
@@ -125,7 +127,12 @@ public class SendErrorProcessURLConnection extends Thread{
 			FileEntity entity = new FileEntity(file, "multipart/form-data");
 			dumppost.setEntity(entity);
 
+			if( file.exists() ) 
+			{
+				Log.d("URQATest", "File True");
+			}
 			HttpResponse response = dumpclient.execute(dumppost);
+			file.delete();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
