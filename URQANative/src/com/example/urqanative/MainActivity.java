@@ -20,6 +20,9 @@ public class MainActivity extends Activity {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
          URQAController.InitializeAndStartSession(this, "12312312");
+         
+     	String j = null;
+		j.charAt(1);
      
          try{
          	String a = invokeNativeFunction();
