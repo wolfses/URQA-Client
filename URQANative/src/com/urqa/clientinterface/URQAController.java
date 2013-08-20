@@ -30,6 +30,7 @@ import com.urqa.common.JsonObj.ErrorSendData;
 import com.urqa.common.JsonObj.IDInstance;
 import com.urqa.common.JsonObj.IDSession;
 import com.urqa.common.JsonObj.SendAPIApp;
+import com.urqa.common.JsonObj.EventPathToJson;
 import com.urqa.eventpath.EventPath;
 import com.urqa.eventpath.EventPathManager;
 import com.urqa.exceptionhandler.ExceptionHandler;
@@ -127,17 +128,53 @@ public final class URQAController {
 	public static void EndActivity(Context context)
 	{
 		//SendEvent
-		List<EventPath> SendEventdata =  EventPathManager.getEventPath();
+		EventPathToJson eventpath = new EventPathToJson();
+		eventpath.eventpaths =  EventPathManager.getEventPath();
 		
 		//없으면 보낼 필요 없지요...
-		if(SendEventdata.size() == 0 || StateData.SessionID == "")
+		if(eventpath.eventpaths.size() == 0)
+			return ;
+		
+		if(StateData.SessionID == "")
+		{
+			class SessionID extends Network
+			{
+				@Override
+				public void CallbackFunction(HttpResponse responseGet ,HttpEntity resEntity)
+				{
+					String jsondata = "";
+					try {
+						jsondata = EntityUtils.toString(resEntity);
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					IDSession idsession =gson.fromJson(jsondata, IDSession.class);
+					StateData.SessionID = idsession.idsession;
+				}
+			}
+			SendAPIApp sendAPIKEY = new SendAPIApp();
+			sendAPIKEY.apikey = StateData.APIKEY;
+			sendAPIKEY.appversion = DeviceCollector.GetAppVersion(context);
+			
+			SessionID getID = new SessionID();
+			getID.SetNetwork(StateData.ServerAddress + "client/connect",
+							 sendAPIKEY, 
+							 Network.Networkformula.POST);
+			getID.start();
 			return;
+		}
+
 		
-		
+		eventpath.idsession = StateData.SessionID;
 		Network SendEventPath = new Network();
-		SendEventPath.SetNetwork(StateData.ServerAddress + "client/connect", 
-								 gson.toJson(SendEventdata), 
+		SendEventPath.SetNetwork(StateData.ServerAddress + "client/send/eventpath", 
+								 eventpath, 
 								 Network.Networkformula.POST);
+		SendEventPath.start();
 	}
 
 
