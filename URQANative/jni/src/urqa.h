@@ -15,6 +15,8 @@ class UrqaNative
 private:
 	static JNIEnv *jEnv;
 
+	static jstring GetCachePath();
+
 public:
 	UrqaNative();
 	~UrqaNative();
