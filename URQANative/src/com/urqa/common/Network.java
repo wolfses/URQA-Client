@@ -92,13 +92,16 @@ public class Network extends Thread {
 			client.getParams().setParameter("http.connection.timeout", 5000);
 			client.getParams().setParameter("http.socket.timeout", 5000);
 			
-			StringEntity input = new StringEntity(gson.toJson(Jsondata),"UTF-8");
+			String test = gson.toJson(Jsondata);
+			StringEntity input = new StringEntity(test,"UTF-8");
 
 			post.setEntity(input);
 			HttpResponse responsePOST = client.execute(post);
 			HttpEntity resEntity = responsePOST.getEntity();
 
 			int getcode = responsePOST.getStatusLine().getStatusCode();
+			
+			
 
 			CallbackFunction(responsePOST,resEntity);
 		} catch (Exception e) {

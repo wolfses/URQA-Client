@@ -21,17 +21,10 @@ public class MainActivity extends Activity {
          setContentView(R.layout.activity_main);
          URQAController.InitializeAndStartSession(this, "12312312");
          
-     	String j = null;
-		j.charAt(1);
-     
-         try{
-         	String a = invokeNativeFunction();
-         }
-         catch(Throwable e)
-         {
-         	Log.d("zzz","뭥미...");
-         	e.printStackTrace();
-         }
+         URQAController.i("adf", "awefawef");
+         URQAController.i("adf", "sethaseth");
+         URQAController.EndActivity(this);
+         String a = null;
 	}
 
 	@Override
