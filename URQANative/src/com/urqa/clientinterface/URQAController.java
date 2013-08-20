@@ -51,11 +51,8 @@ public final class URQAController {
 		Log.e("URQATEST","Dump Path : " + str);
 		ErrorReport report = ErrorReportFactory.CreateNativeErrorReport(StateData.AppContext);
 		
-		Log.e("URQATEST","여기까지 옴");
 		SendErrorProcessURLConnection errprocess = new SendErrorProcessURLConnection(report, "client/send/exception/native",str);
-		Log.e("URQATEST","여기까지 옴1");
 		errprocess.start();
-		Log.e("URQATEST","여기까지 옴2");
 		
 		try {
 			errprocess.join();
@@ -63,8 +60,6 @@ public final class URQAController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		//Log.e("URQATEST","value : " + str);
-		Log.e("URQATEST","여기까지 옴3");
 		
 		return 0;
 	}

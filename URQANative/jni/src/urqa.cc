@@ -17,7 +17,13 @@ bool UrqaNative::DumpCallback(const google_breakpad::MinidumpDescriptor& descrip
 		bool succeeded)
 {
 	//__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "Dump path: %s\n", descriptor.path());
-	JavaCallTest(descriptor.path());
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "CallBack");
+	//ExceptionJavaCall(descriptor.path());
+
+	void* address = descriptor.GetMemoryAddress();
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "Memory Address: %s", address);
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "size: %d", descriptor.getSize());
+
 	//여기서 처리해줘야됨
 	return succeeded;
 }
@@ -31,9 +37,10 @@ void UrqaNative::URQAIntialize(JNIEnv *env)
 
 	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "IntializeURQANativeSuccess");
 }
-void UrqaNative::JavaCallTest(const char* path)
+
+void UrqaNative::ExceptionJavaCall(const char* path)
 {
-	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "In JavaCallTest");
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "In ExceptionJavaCall");
 
 
 	jclass cls = jEnv->FindClass("com/urqa/clientinterface/URQAController");

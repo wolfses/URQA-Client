@@ -51,14 +51,18 @@ class MinidumpDescriptor {
       : fd_(-1),
         directory_(directory),
         c_path_(NULL),
-        size_limit_(-1) {
+        size_limit_(-1),
+        memory (NULL),
+        size(0){
     assert(!directory.empty());
   }
 
   explicit MinidumpDescriptor(int fd)
       : fd_(fd),
         c_path_(NULL),
-        size_limit_(-1) {
+        size_limit_(-1),
+        memory(NULL),
+        size(0){
     assert(fd != -1);
   }
 
@@ -80,6 +84,12 @@ class MinidumpDescriptor {
   off_t size_limit() const { return size_limit_; }
   void set_size_limit(off_t limit) { size_limit_ = limit; }
 
+  void * GetMemoryAddress() const { return memory;}
+  unsigned int getSize() const { return size;}
+
+  void SetMemoryAddress(void * address) { memory = address;}
+  void SetSize(unsigned int size){ this->size = size;}
+
  private:
   // The file descriptor where the minidump is generated.
   int fd_;
@@ -93,6 +103,11 @@ class MinidumpDescriptor {
   const char* c_path_;
 
   off_t size_limit_;
+
+  ///////////////추가 메모리///////////////
+  void * memory;
+  unsigned int size;
+
 };
 
 }  // namespace google_breakpad

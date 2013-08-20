@@ -15,6 +15,12 @@ class UrqaNative
 private:
 	static JNIEnv *jEnv;
 
+	static bool DumpCallback(const google_breakpad::MinidumpDescriptor& descriptor,
+								void* context,
+								bool succeeded);
+
+	static void ExceptionJavaCall(const char* path);
+
 public:
 	UrqaNative();
 	~UrqaNative();
@@ -23,11 +29,6 @@ public:
 public:
 	static void URQAIntialize(JNIEnv *env);
 	//static void URQASendException(std::exception &e);
-	static bool DumpCallback(const google_breakpad::MinidumpDescriptor& descriptor,
-								void* context,
-								bool succeeded);
-
-	static void JavaCallTest(const char* path);
 };
 
 

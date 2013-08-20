@@ -64,6 +64,7 @@
 // context which it runs in.
 
 #include "client/linux/handler/exception_handler.h"
+#include "URQAGlober.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -76,6 +77,8 @@
 #include <sys/syscall.h>
 #include <sys/wait.h>
 #include <unistd.h>
+
+#include <android/log.h>
 
 #include <sys/signal.h>
 #include <sys/ucontext.h>
@@ -374,6 +377,9 @@ int ExceptionHandler::ThreadEntry(void *arg) {
 
   // Block here until the crashing process unblocks us when
   // we're allowed to use ptrace
+
+  __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "ThreadEntry");
+
   thread_arg->handler->WaitForContinueSignal();
 
   return thread_arg->handler->DoDump(thread_arg->pid, thread_arg->context,
@@ -487,7 +493,11 @@ bool ExceptionHandler::GenerateDump(CrashContext *context) {
 
   bool success = r != -1 && WIFEXITED(status) && WEXITSTATUS(status) == 0;
   if (callback_)
-    success = callback_(minidump_descriptor_, callback_context_, success);
+  {
+	minidump_descriptor_.SetMemoryAddress(::g_MemoryAddress);
+	minidump_descriptor_.SetSize(::g_size);
+	success = callback_(minidump_descriptor_, callback_context_, success);
+  }
   return success;
 }
 
@@ -523,8 +533,9 @@ void ExceptionHandler::WaitForContinueSignal() {
 // This function runs in a compromised context: see the top of the file.
 // Runs on the cloned process.
 bool ExceptionHandler::DoDump(pid_t crashing_process, const void* context,
-                              size_t context_size) {
+                              size_t context_size ) {
   if (minidump_descriptor_.IsFD()) {
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "DoDump");
     return google_breakpad::WriteMinidump(minidump_descriptor_.fd(),
                                           minidump_descriptor_.size_limit(),
                                           crashing_process,

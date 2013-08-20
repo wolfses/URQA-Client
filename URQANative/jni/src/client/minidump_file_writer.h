@@ -136,6 +136,8 @@ public:
    bool WriteStringCore(const CharType *str, unsigned int length,
                         MDLocationDescriptor *location);
 
+   // Current allocated size
+   size_t size_;
  private:
 
 
@@ -149,9 +151,6 @@ public:
 
   // Whether |file_| should be closed when the instance is destroyed.
   bool close_file_when_destroyed_;
-
-  // Current allocated size
-  size_t size_;
 
 };
 

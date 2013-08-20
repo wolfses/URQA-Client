@@ -46,6 +46,10 @@
 #include "client/linux/handler/minidump_descriptor.h"
 #include "client/linux/minidump_writer/minidump_writer.h"
 #include "client/minidump_file_writer-inl.h"
+#include "URQAGlober.h"
+
+#include <android/log.h>
+
 
 #include <ctype.h>
 #include <errno.h>
@@ -69,10 +73,11 @@
 #include "client/linux/minidump_writer/linux_dumper.h"
 #include "client/linux/minidump_writer/linux_ptrace_dumper.h"
 #include "client/linux/minidump_writer/proc_cpuinfo_reader.h"
-#include "client/minidump_file_writer.h"
+//#include "client/minidump_file_writer.h"
 #include "common/linux/linux_libc_support.h"
 #include "google_breakpad/common/minidump_format.h"
 #include "third_party/lss/linux_syscall_support.h"
+#include "minidump_memory_writer.h"
 
 namespace {
 
@@ -92,6 +97,7 @@ using google_breakpad::ThreadInfo;
 using google_breakpad::TypedMDRVA;
 using google_breakpad::UntypedMDRVA;
 using google_breakpad::wasteful_vector;
+using google_breakpad::minidump_memory_writer;
 
 // Minidump defines register structures which are different from the raw
 // structures which we get from the kernel. These are platform specific
@@ -529,6 +535,11 @@ class MinidumpWriter {
     // If you add more directory entries, don't forget to update kNumWriters,
     // above.
 
+    //여기서 값을 넘김....
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "minidump_writer . dump()");
+    ::g_MemoryAddress = minidump_writer_.GetMemoryAddress();
+    ::g_size = minidump_writer_.size_;
+    __android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "Address : %s, Size : %d",::g_MemoryAddress,::g_size);
     dumper_->ThreadsResume();
     return true;
   }
@@ -1645,9 +1656,12 @@ class MinidumpWriter {
   const struct ucontext* const ucontext_;  // also from the signal handler
   const struct _libc_fpstate* const float_state_;  // ditto
   LinuxDumper* dumper_;
+
+  ///////////////////////////////////////////////////////////////////////////
   //Memory Dump 수정...
-  MinidumpFileWriter minidump_writer_;
-  //MinidumpMemoryWriter minidump_writer_;
+  //MinidumpFileWriter minidump_writer_;
+  minidump_memory_writer minidump_writer_;
+  ///////////////////////////////////////////////////////////////////////////
 
   off_t minidump_size_limit_;
   MDLocationDescriptor crashing_thread_context_;
@@ -1660,6 +1674,7 @@ class MinidumpWriter {
   // Additional memory regions to be included in the dump,
   // provided by the caller.
   const AppMemoryList& app_memory_list_;
+
 };
 
 
@@ -1670,6 +1685,7 @@ bool WriteMinidumpImpl(const char* minidump_path,
                        const void* blob, size_t blob_size,
                        const MappingList& mappings,
                        const AppMemoryList& appmem) {
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "WriteminidumpImpl");
   LinuxPtraceDumper dumper(crashing_process);
   const ExceptionHandler::CrashContext* context = NULL;
   if (blob) {
@@ -1709,7 +1725,7 @@ bool WriteMinidump(int minidump_fd, pid_t crashing_process,
 }
 
 bool WriteMinidump(const char* minidump_path, pid_t process,
-                   pid_t process_blamed_thread) {
+                   pid_t process_blamed_thread ) {
   LinuxPtraceDumper dumper(process);
   // MinidumpWriter will set crash address
   dumper.set_crash_signal(MD_EXCEPTION_CODE_LIN_DUMP_REQUESTED);

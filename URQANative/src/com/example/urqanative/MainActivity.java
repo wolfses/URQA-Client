@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
      
      private native String invokeNativeFunction();
 
-
+ 
      @Override
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
@@ -22,15 +22,15 @@ public class MainActivity extends Activity {
          URQAController.InitializeAndStartSession(this, "12312312");
      
          try{
-         	String a = invokeNativeFunction();
-         }
+         	String a = invokeNativeFunction(); 
+         } 
          catch(Throwable e)
          {
          	Log.d("zzz","뭥미...");
          	e.printStackTrace();
          }
-	}
-
+	} 
+ 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

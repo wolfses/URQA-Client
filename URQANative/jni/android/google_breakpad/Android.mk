@@ -93,7 +93,8 @@ LOCAL_SRC_FILES := \
     src/common/linux/memory_mapped_file.cc \
     src/common/linux/safe_readlink.cc \
     src/urqa.cc \
-    src/minidump_memory_writer.cc
+    src/minidump_memory_writer.cc\
+    src/URQAGlober.cc
 
 LOCAL_C_INCLUDES        := $(LOCAL_PATH)/src/common/android/include \
                            $(LOCAL_PATH)/src

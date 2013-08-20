@@ -46,6 +46,8 @@ class minidump_memory_writer : public MinidumpFileWriter
 		  // Copies |size| bytes from |src| to |position|
 		  // Return true on success, or false on failure
 		  bool Copy(MDRVA position, const void *src, ssize_t size);
+
+		  uint32_t * GetMemoryAddress() {return Memory_Address;}
 };
 
 }

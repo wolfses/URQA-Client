@@ -5,16 +5,18 @@ namespace google_breakpad {
 minidump_memory_writer::minidump_memory_writer()
 :MinidumpFileWriter(),Memory_Address(0)
 {
-
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "생성자 호출?");
 }
 minidump_memory_writer::~minidump_memory_writer()
 {
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "소멸자 호출?");
 	Close();
 }
 bool minidump_memory_writer::Open(const char *path)
 {
 	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "Memory_Writer_OPEN");
 	Memory_Address = (MDRVA*)malloc(1024*1024); // 1M당!!!
+	memset(Memory_Address,0,size_);
 	return true;
 }
 
@@ -25,6 +27,7 @@ void minidump_memory_writer::SetFile(const int file)
 bool minidump_memory_writer::Close()
 {
 	//여기서 옮기는 걸로하자 (메모리 복사)static 영역에 옹키?
+	__android_log_print(ANDROID_LOG_DEBUG, "URQAnative", "close!! free Memory");
 	free(Memory_Address);
 	Memory_Address = NULL;
 	return true;
