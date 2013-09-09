@@ -100,6 +100,7 @@ public class ErrorReportFactory {
 		senddata.errorname		= data.ErrorName; 
 		senddata.errorclassname	= data.ClassName;
 		senddata.linenum		= data.Line;
+		senddata.lastactivity	= data.ActivityName;
 		senddata.callstack		= CallStack;
 		senddata.appversion		= packageinfo.versionName;
 		senddata.osversion		= android.os.Build.VERSION.RELEASE;

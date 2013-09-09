@@ -24,6 +24,7 @@ public class ErrorSendData {
 		mobileon			= 0;
 		scrwidth			= -1;
 		scrheight			= -1;
+		lastactivity		="";
 		
 		//CallStackFileName 	= null;
 		//LogFileName			= null;
@@ -169,6 +170,8 @@ public class ErrorSendData {
 	 * 시스템 메모리가 부족한가 안부족한가
 	 */
 	public int sysmemlow;
+	
+	public String lastactivity;
 	
 	public List<EventPath> eventpaths;
 }

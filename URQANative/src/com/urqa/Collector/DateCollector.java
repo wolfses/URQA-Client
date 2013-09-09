@@ -15,7 +15,7 @@ public class DateCollector {
 		Calendar cal = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 	     Date currentLocalTime = cal.getTime();
 	     DateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");   
-	     date.setTimeZone(TimeZone.getTimeZone("GMT")); 
+	     date.setTimeZone(TimeZone.getTimeZone("UTC")); 
 	     String localTime = date.format(currentLocalTime); 
 	     return localTime;
 	     

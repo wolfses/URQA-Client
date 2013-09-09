@@ -14,7 +14,7 @@ public class LogCollector {
 	
 	public final static String getLog(Context context) {
 	    StringBuilder LOGCAT_CMD = new StringBuilder();
-	    LOGCAT_CMD.append("logcat").append(" -d").append(" *:V");
+	    LOGCAT_CMD.append("logcat").append(" -d").append(" -v").append(" time").append(" tags").append(" *:V");
 	    //.append(StateData.LogFilter);
 	    
 	    Process logcatProc = null;

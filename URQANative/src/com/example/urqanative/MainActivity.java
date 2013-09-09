@@ -19,12 +19,20 @@ public class MainActivity extends Activity {
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
-         URQAController.InitializeAndStartSession(this, "12312312");
+         URQAController.InitializeAndStartSession(this, "15081163");
          
-         URQAController.i("adf", "awefawef");
-         URQAController.i("adf", "sethaseth");
-         URQAController.EndActivity(this);
-         String a = null;
+         URQAController.i("error!!Test", "1");
+         URQAController.i("error!!Test", "2");
+         URQAController.i("error!!Test", "3");
+         URQAController.i("error!!Test", "4");
+         URQAController.i("error!!Test", "5");
+         try{
+        	 String a = null;
+        	 a.charAt(1);
+         }catch(Exception e)
+         {
+             URQAController.SendException(e);
+         }
 	}
 
 	@Override

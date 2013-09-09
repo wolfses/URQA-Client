@@ -187,7 +187,7 @@ public final class URQAController {
 	}
 	public static void SendException(Exception e)	
 	{
-		SendException(e, null, ErrorRank.Nothing);
+		SendException(e, "", ErrorRank.Nothing);
 	}
 	public static void SendException(Exception e, String Tag)
 	{

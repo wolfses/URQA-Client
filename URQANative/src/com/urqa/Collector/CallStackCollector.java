@@ -44,6 +44,31 @@ public class CallStackCollector {
         data.ClassName = ErrorElements[0].getClassName();
         data.Line = ErrorElements[0].getLineNumber();
         
+        String activityclass = SearchCallstackinActivity(ErrorElements);
+        data.ActivityName = activityclass;
+               
         return data;
+	}
+	
+	public static String SearchCallstackinActivity(StackTraceElement[] ErrorElements)
+	{
+		String Activityclassname = "";
+		for(int i = 0 ; i < ErrorElements.length ; i++)
+		{
+			String classname = ErrorElements[i].getClassName();
+			try{
+				Class klass = Class.forName(classname);
+				if(android.app.Activity.class.isAssignableFrom(klass))
+				{
+					Activityclassname = classname;
+					break;
+				}
+			}
+			catch(Exception e)
+			{
+				
+			}
+		}
+		return Activityclassname;
 	}
 }
