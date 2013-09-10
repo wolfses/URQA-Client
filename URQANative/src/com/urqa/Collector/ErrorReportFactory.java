@@ -72,6 +72,7 @@ public class ErrorReportFactory {
 		senddata.sysmemlow		= (DeviceCollector.GetSystemLowMemory()) ? 1 : 0;
 		senddata.eventpaths		= EventPathManager.GetErrorEventPath();
 		senddata.locale			= DeviceCollector.GetLocale(context);
+		senddata.rank			= ErrorRank.Native.value();
 		
 		return senddata;
 	}

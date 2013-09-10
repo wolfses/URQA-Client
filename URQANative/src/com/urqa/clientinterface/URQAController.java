@@ -119,9 +119,11 @@ public final class URQAController {
 			
 			
 		}
-		
-		StartActivity(context);
+		EventPathManager.ClearEvent();
+		//StartActivity(context);
 	}
+	
+	/*
 	public static void StartActivity(Context context)
 	{
 		//이벤트 패스 클리어
@@ -182,7 +184,7 @@ public final class URQAController {
 		SendEventPath.start();
 	}
 
-
+	*/
 	public static void SendException(Exception e, String Tag, ErrorRank rank)
 	{
 		ErrorReport report = ErrorReportFactory.CreateErrorReport(e, Tag, rank, StateData.AppContext);
@@ -192,11 +194,11 @@ public final class URQAController {
 	}
 	public static void SendException(Exception e)	
 	{
-		SendException(e, "", ErrorRank.Nothing);
+		SendException(e, "", ErrorRank.Minor);
 	}
 	public static void SendException(Exception e, String Tag)
 	{
-		SendException(e, Tag, ErrorRank.Nothing);
+		SendException(e, Tag, ErrorRank.Minor);
 	}
 
 	

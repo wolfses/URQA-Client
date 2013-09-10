@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
          URQAController.i("error!!Test", "3");
          URQAController.i("error!!Test", "4");
          URQAController.i("error!!Test", "5");
+         invokeNativeFunction();
          URQAController.leaveBreadcrumb();
          try{
         	 String a = null;
