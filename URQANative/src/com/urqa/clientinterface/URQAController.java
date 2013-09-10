@@ -50,6 +50,11 @@ public final class URQAController {
 	
 	private static ExceptionHandler handler = null;
 	
+	public static void leaveBreadcrumb()
+	{
+		EventPathManager.CreateEventPath(2);
+	}
+	
 	public static int NativeCrashCallback(String str)
 	{
 		
