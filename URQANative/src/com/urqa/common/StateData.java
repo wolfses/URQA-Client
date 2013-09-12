@@ -7,6 +7,7 @@ import android.content.Context;
 public class StateData {
 	
 	public static Context 	AppContext = null;
+	public static String 	SDKVersion = "0.9";  
 	
 	public static String 	APIKEY = "";
 	
@@ -21,7 +22,7 @@ public class StateData {
 	public static boolean 	TransferLog 	= true;
 	public static String 	LogFilter 		= "";
 	
-	public static String	ServerAddress	= "http://172.16.100.67:8000/urqa/"; 
+	public static String	ServerAddress	= "http://61.43.139.22/urqa/"; 
 	
 
 }

@@ -194,11 +194,11 @@ public final class URQAController {
 	}
 	public static void SendException(Exception e)	
 	{
-		SendException(e, "", ErrorRank.Minor);
+		SendException(e, "", ErrorRank.Critical);
 	}
 	public static void SendException(Exception e, String Tag)
 	{
-		SendException(e, Tag, ErrorRank.Minor);
+		SendException(e, Tag, ErrorRank.Critical);
 	}
 
 	

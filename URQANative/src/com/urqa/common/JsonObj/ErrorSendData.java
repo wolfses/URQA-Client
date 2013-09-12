@@ -2,12 +2,13 @@ package com.urqa.common.JsonObj;
 
 import java.util.List;
 
+import com.urqa.common.StateData;
 import com.urqa.eventpath.EventPath;
 
 public class ErrorSendData {
 	public ErrorSendData() {
 		// TODO Auto-generated constructor stub
-		sdkversion			= "1.0";
+		sdkversion			= StateData.SDKVersion;
 		locale				= "";
 		apikey				= "";
 		datetime 			= "unknown";
