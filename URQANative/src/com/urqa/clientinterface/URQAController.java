@@ -16,7 +16,7 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.Gson;
+
 import com.urqa.Collector.CallStackCollector;
 import com.urqa.Collector.DateCollector;
 import com.urqa.Collector.DeviceCollector;
@@ -48,7 +48,7 @@ import android.util.Log;
 
 public final class URQAController {
 	
-	private static final Gson gson = new Gson();
+	
 	
 	private static ExceptionHandler handler = null;
 	
@@ -104,20 +104,10 @@ public final class URQAController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					//gson 빼기
-					IDSession idsession =gson.fromJson(jsondata, IDSession.class);
-					StateData.SessionID = idsession.idsession;
-					/*try
-					{
-						JSONObject jobj = new JSONObject(jsondata);
-						IDSession idsession = new IDSession();
-						idsession.idsession = jobj.getString("idsession");
+					IDSession idsession = new IDSession();
+					idsession.fromJson(jsondata);
+					if( idsession.idsession != "")
 						StateData.SessionID = idsession.idsession;
-					}
-					catch(JSONException e)
-					{
-						e.printStackTrace();
-					}*/
 				}
 			}
 			

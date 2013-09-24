@@ -11,7 +11,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
 
-import com.google.gson.Gson;
 import com.urqa.Collector.ErrorReport;
 import com.urqa.common.JsonObj.ErrorSendData;
 import com.urqa.common.JsonObj.IDInstance;
@@ -31,7 +30,7 @@ public class SendErrorProcess extends Thread{
 	public void run()
 	{
 		try {
-			Gson gson = new Gson();
+			
 			
 			HttpClient client = new DefaultHttpClient();
 			HttpPost post = new HttpPost(StateData.ServerAddress + url);
@@ -41,7 +40,7 @@ public class SendErrorProcess extends Thread{
 			client.getParams().setParameter("http.connection.timeout", 5000);
 			client.getParams().setParameter("http.socket.timeout", 5000);
 			
-			String test = gson.toJson(report.ErrorData);
+			String test = report.ErrorData.toJson(); 
 			StringEntity input = new StringEntity(test,"UTF-8");
 
 			post.setEntity(input);
@@ -61,8 +60,9 @@ public class SendErrorProcess extends Thread{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			IDInstance idinstance =gson.fromJson(jsondata, IDInstance.class);
-
+			IDInstance idinstance = new IDInstance();
+			idinstance.fromJson(jsondata);
+					
 			try {
 			   HttpClient logclient = new DefaultHttpClient();
 			   

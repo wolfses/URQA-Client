@@ -12,26 +12,26 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.util.Log;
 
-import com.google.gson.Gson;
+
+import com.urqa.common.JsonObj.JsonObj;
 
 
 // /urqa/client/connect
 
 public class Network extends Thread {
 	
-	private static final Gson gson = new Gson();
-	
+
 	public enum Networkformula{
 		GET,POST
 	}
 	String URL;
-	Object Jsondata;
+	JsonObj Jsondata;
 	Networkformula formula;
 	
 	public Network()
 	{}
 	
-	public void SetNetwork(String uRL, Object jsondata, Networkformula formula)
+	public void SetNetwork(String uRL, JsonObj jsondata, Networkformula formula)
 	{
 		URL = uRL;
 		Jsondata = jsondata;
@@ -92,7 +92,7 @@ public class Network extends Thread {
 			client.getParams().setParameter("http.connection.timeout", 5000);
 			client.getParams().setParameter("http.socket.timeout", 5000);
 			
-			String test = gson.toJson(Jsondata);
+			String test = Jsondata.toJson();
 			StringEntity input = new StringEntity(test,"UTF-8");
 
 			post.setEntity(input);

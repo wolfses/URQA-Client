@@ -29,6 +29,9 @@ public class MainActivity extends Activity {
          URQAController.i("error!!Test", "5");
          URQAController.i("error!!Test", "6");
          URQAController.i("error!!Test", "7");
+         URQAController.i("error!!Test", "8");
+         URQAController.i("error!!Test", "9");
+         
 //         invokeNativeFunction();
          URQAController.leaveBreadcrumb();
          try{
@@ -36,7 +39,7 @@ public class MainActivity extends Activity {
         	 a.charAt(1);
          }catch(Exception e)
          {
-             URQAController.SendException(e,"",ErrorRank.Minor);
+             URQAController.SendException(e,"aetdjdfghdrthdrth",ErrorRank.Critical);
          }
 	}
 
