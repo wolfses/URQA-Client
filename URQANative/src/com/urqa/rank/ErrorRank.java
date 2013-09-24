@@ -1,8 +1,8 @@
 package com.urqa.rank;
 
 public enum ErrorRank {
-	Nothing(-1),Unhandle(0),Critical(1),Major(2),Minor(3),Native(4);
-
+	Nothing(-1),Unhandle(0),Native(1),Critical(2),Major(3),Minor(4);
+	 
 	private final int value;
 	
 	ErrorRank(int value) 

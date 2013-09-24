@@ -13,6 +13,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.urqa.Collector.CallStackCollector;
@@ -102,8 +104,20 @@ public final class URQAController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					//gson 빼기
 					IDSession idsession =gson.fromJson(jsondata, IDSession.class);
 					StateData.SessionID = idsession.idsession;
+					/*try
+					{
+						JSONObject jobj = new JSONObject(jsondata);
+						IDSession idsession = new IDSession();
+						idsession.idsession = jobj.getString("idsession");
+						StateData.SessionID = idsession.idsession;
+					}
+					catch(JSONException e)
+					{
+						e.printStackTrace();
+					}*/
 				}
 			}
 			

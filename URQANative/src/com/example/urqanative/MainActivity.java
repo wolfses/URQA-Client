@@ -1,6 +1,7 @@
 package com.example.urqanative;
 
 import com.urqa.clientinterface.URQAController;
+import com.urqa.rank.ErrorRank;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -19,21 +20,23 @@ public class MainActivity extends Activity {
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
-         URQAController.InitializeAndStartSession(this, "F35925DE");
+         URQAController.InitializeAndStartSession(this, "313458AA");
          
          URQAController.i("error!!Test", "1");
          URQAController.i("error!!Test", "2");
          URQAController.i("error!!Test", "3");
          URQAController.i("error!!Test", "4");
          URQAController.i("error!!Test", "5");
-         invokeNativeFunction();
+         URQAController.i("error!!Test", "6");
+         URQAController.i("error!!Test", "7");
+//         invokeNativeFunction();
          URQAController.leaveBreadcrumb();
          try{
         	 String a = null;
         	 a.charAt(1);
          }catch(Exception e)
          {
-             URQAController.SendException(e);
+             URQAController.SendException(e,"",ErrorRank.Minor);
          }
 	}
 
