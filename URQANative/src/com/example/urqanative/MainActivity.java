@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
-         URQAController.InitializeAndStartSession(this, "313458AA");
+         URQAController.InitializeAndStartSession(this, "D56F81A8");
          
          URQAController.i("error!!Test", "1");
          URQAController.i("error!!Test", "2");
