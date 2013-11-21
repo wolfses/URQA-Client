@@ -20,7 +20,7 @@ public class MainActivity extends Activity {
      public void onCreate(Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          setContentView(R.layout.activity_main);
-         URQAController.InitializeAndStartSession(this, "D56F81A8");
+         URQAController.InitializeAndStartSession(this, "DDC2C89B");
          
          URQAController.i("error!!Test", "1");
          URQAController.i("error!!Test", "2");
@@ -32,7 +32,7 @@ public class MainActivity extends Activity {
          URQAController.i("error!!Test", "8");
          URQAController.i("error!!Test", "9");
          
-//         invokeNativeFunction();
+         invokeNativeFunction();
          URQAController.leaveBreadcrumb();
          try{
         	 String a = null;
