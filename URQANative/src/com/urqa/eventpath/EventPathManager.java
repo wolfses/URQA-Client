@@ -28,14 +28,7 @@ public class EventPathManager {
 	static synchronized public void CreateEventPath(int Step,String tag)
 	{
 		StackTraceElement[] stackTrace = new Exception().getStackTrace();
-		
-		Class<?> enclosingClass = stackTrace[Step].getClass().getEnclosingClass();
-		if (enclosingClass != null) {
-			Log.i("Fanpple", enclosingClass.getName());
-		} else {
-			Log.i("Fanpple", stackTrace[Step].getClass().getName());
-		}
-		
+				
 		EventPath eventpath = new EventPath(DateCollector.GetDateYYMMDDHHMMSS(StateData.AppContext),
 											stackTrace[Step].getClassName(), 
 											stackTrace[Step].getMethodName(),
