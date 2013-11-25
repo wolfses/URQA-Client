@@ -223,6 +223,7 @@ public class ErrorSendData extends JsonObj {
 				event.put("datetime", eventpaths.get(i).getDatetime());
 				event.put("classname", eventpaths.get(i).getClassName());
 				event.put("methodname", eventpaths.get(i).getMethodName());
+				event.put("tag", eventpaths.get(i).getTag());
 				event.put("linenum", eventpaths.get(i).getLine());
 				
 				eventpath.put(event);

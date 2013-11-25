@@ -54,7 +54,12 @@ public final class URQAController {
 	
 	public static void leaveBreadcrumb()
 	{
-		EventPathManager.CreateEventPath(2);
+		EventPathManager.CreateEventPath(2,"");
+	}
+	
+	public static void leaveBreadcrumb(String tag)
+	{
+		EventPathManager.CreateEventPath(2,tag);
 	}
 	
 	public static int NativeCrashCallback(String str)
@@ -312,7 +317,7 @@ public final class URQAController {
 	
 	private static int log(LogLevel level, String tag,String Msg, Throwable tr)
 	{
-		EventPathManager.CreateEventPath(3);
+		EventPathManager.CreateEventPath(3,"");
 		
 		if(StateData.ToggleLogCat)
 			return loglevel(level,tag,Msg,tr);

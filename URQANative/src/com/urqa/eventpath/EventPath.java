@@ -3,19 +3,20 @@ package com.urqa.eventpath;
 public class EventPath {
 	
 
-	public EventPath(String datetime, String classname, String methodname,
+	public EventPath(String datetime, String classname, String methodname, String tag,
 			int linenum) {
 		super();
 		this.datetime = datetime;
 		this.classname = classname;
 		this.methodname = methodname;
 		this.linenum = linenum;
+		this.tag = tag;
 	}
 	private String  datetime;
 	private String 	classname;
 	private String 	methodname;
+	private String	tag;
 	private int		linenum;
-	
 	public String getClassName() {
 		return classname;
 	}
@@ -39,5 +40,11 @@ public class EventPath {
 	}
 	public void setDatetime(String datetime) {
 		this.datetime = datetime;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
 	}
 }

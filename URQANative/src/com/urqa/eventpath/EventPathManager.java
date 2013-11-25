@@ -3,6 +3,8 @@ package com.urqa.eventpath;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
+
 import com.urqa.Collector.DateCollector;
 import com.urqa.common.StateData;
 
@@ -23,13 +25,21 @@ public class EventPathManager {
 	private static EventPath ErrorEventPaths[] = new EventPath[MaxEventPath];
 	private static int ErrorEventPathsCounter = 0;
 	
-	static synchronized public void CreateEventPath(int Step)
+	static synchronized public void CreateEventPath(int Step,String tag)
 	{
 		StackTraceElement[] stackTrace = new Exception().getStackTrace();
 		
+		Class<?> enclosingClass = stackTrace[Step].getClass().getEnclosingClass();
+		if (enclosingClass != null) {
+			Log.i("Fanpple", enclosingClass.getName());
+		} else {
+			Log.i("Fanpple", stackTrace[Step].getClass().getName());
+		}
+		
 		EventPath eventpath = new EventPath(DateCollector.GetDateYYMMDDHHMMSS(StateData.AppContext),
 											stackTrace[Step].getClassName(), 
-											stackTrace[Step].getMethodName(), 
+											stackTrace[Step].getMethodName(),
+											tag,
 											stackTrace[Step].getLineNumber());
 		
 		ShiftErrorEventPath();
