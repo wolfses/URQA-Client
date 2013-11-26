@@ -25,14 +25,14 @@ public class EventPathManager {
 	private static EventPath ErrorEventPaths[] = new EventPath[MaxEventPath];
 	private static int ErrorEventPathsCounter = 0;
 	
-	static synchronized public void CreateEventPath(int Step,String tag)
+	static synchronized public void CreateEventPath(int Step,String label)
 	{
 		StackTraceElement[] stackTrace = new Exception().getStackTrace();
 				
 		EventPath eventpath = new EventPath(DateCollector.GetDateYYMMDDHHMMSS(StateData.AppContext),
 											stackTrace[Step].getClassName(), 
 											stackTrace[Step].getMethodName(),
-											tag,
+											label,
 											stackTrace[Step].getLineNumber());
 		
 		ShiftErrorEventPath();

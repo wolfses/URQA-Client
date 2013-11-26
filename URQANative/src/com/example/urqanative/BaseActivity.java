@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.urqa.clientinterface.URQAController;
+import com.urqa.common.StateData;
 import com.urqa.rank.ErrorRank;
 
 public class BaseActivity extends Activity {
@@ -12,17 +13,20 @@ public class BaseActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        URQAController.InitializeAndStartSession(this, "DDC2C89B");
+        //StateData.ServerAddress = "http://ur-qa.com:9000/urqa/"; 
+        URQAController.InitializeAndStartSession(this, "61278AC7");
         
-        URQAController.i("error!!Test", "1");
-        URQAController.i("error!!Test", "2");
-        URQAController.i("error!!Test", "3");
-        URQAController.i("error!!Test", "4");
-        URQAController.i("error!!Test", "5");
-        URQAController.i("error!!Test", "6");
-        URQAController.i("error!!Test", "7");
-        URQAController.i("error!!Test", "8");
-        URQAController.i("error!!Test", "9");
+        URQAController.leaveBreadcrumb("1");
+        URQAController.leaveBreadcrumb("2");
+        URQAController.leaveBreadcrumb("3");
+        URQAController.leaveBreadcrumb("4");
+        URQAController.leaveBreadcrumb("5");
+        URQAController.leaveBreadcrumb("6");
+        URQAController.leaveBreadcrumb("7");
+        URQAController.leaveBreadcrumb("8");
+        URQAController.leaveBreadcrumb("9");
+        URQAController.leaveBreadcrumb("10");
+        
         
         Class<?> enclosingClass = getClass().getEnclosingClass();
 		if (enclosingClass != null) {
