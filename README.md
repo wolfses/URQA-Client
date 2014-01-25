@@ -1,2 +1,2 @@
-URQA-Client
+URQA-Client for Android
 ===========
