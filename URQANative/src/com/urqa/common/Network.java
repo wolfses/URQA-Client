@@ -62,8 +62,8 @@ public class Network extends Thread {
 			HttpClient client = new DefaultHttpClient();
 
 			client.getParams().setParameter("http.protocol.expect-continue", false);
-			client.getParams().setParameter("http.connection.timeout", 5000);
-			client.getParams().setParameter("http.socket.timeout", 5000);
+			client.getParams().setParameter("http.connection.timeout", 30000);
+			client.getParams().setParameter("http.socket.timeout", 30000);
 			
 			
 			HttpGet get = new HttpGet(URL);
@@ -89,8 +89,8 @@ public class Network extends Thread {
 			post.setHeader("Content-Type", "application/json; charset=utf-8");
 			
 			client.getParams().setParameter("http.protocol.expect-continue", false);
-			client.getParams().setParameter("http.connection.timeout", 5000);
-			client.getParams().setParameter("http.socket.timeout", 5000);
+			client.getParams().setParameter("http.connection.timeout", 30000);
+			client.getParams().setParameter("http.socket.timeout", 30000);
 			
 			String test = Jsondata.toJson();
 			StringEntity input = new StringEntity(test,"UTF-8");
