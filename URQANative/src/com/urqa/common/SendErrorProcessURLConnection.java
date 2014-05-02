@@ -56,8 +56,8 @@ public class SendErrorProcessURLConnection extends Thread{
 			post.setHeader("Content-Type", "application/json; charset=utf-8");
 			client.getParams().setParameter("http.protocol.expect-continue",
 					false);
-			client.getParams().setParameter("http.connection.timeout", 5000);
-			client.getParams().setParameter("http.socket.timeout", 5000);
+			client.getParams().setParameter("http.connection.timeout", 30000);
+			client.getParams().setParameter("http.socket.timeout", 30000);
 
 			String test = report.ErrorData.toJson(); 
 			StringEntity input = new StringEntity(test, "UTF-8");
@@ -91,8 +91,8 @@ public class SendErrorProcessURLConnection extends Thread{
 				logclient.getParams().setParameter(
 						"http.protocol.expect-continue", false);
 				logclient.getParams().setParameter("http.connection.timeout",
-						5000);
-				logclient.getParams().setParameter("http.socket.timeout", 5000);
+						30000);
+				logclient.getParams().setParameter("http.socket.timeout", 30000);
 
 				// 1. 파일의 내용을 body 로 설정함
 				logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
@@ -118,8 +118,8 @@ public class SendErrorProcessURLConnection extends Thread{
 			dumpclient.getParams().setParameter(
 					"http.protocol.expect-continue", false);
 			dumpclient.getParams()
-					.setParameter("http.connection.timeout", 5000);
-			dumpclient.getParams().setParameter("http.socket.timeout", 5000);
+					.setParameter("http.connection.timeout", 30000);
+			dumpclient.getParams().setParameter("http.socket.timeout", 30000);
 
 			// 1. 파일의 내용을 body 로 설정함
 			dumppost.setHeader("Content-Type",
