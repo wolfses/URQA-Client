@@ -1,13 +1,11 @@
 package com.urqa.common;
 
-import com.urqa.eventpath.EventPath;
-
 import android.content.Context;
 
 public class StateData {
 	
 	public static Context 	AppContext = null;
-	public static String 	SDKVersion = "0.93";  
+	public static String 	SDKVersion = "0.94";  
 	
 	public static String 	APIKEY = "";
 	
@@ -22,7 +20,7 @@ public class StateData {
 	public static boolean 	TransferLog 	= true;
 	public static String 	LogFilter 		= "";
 	
-	public static String	ServerAddress	= "http://ur-qa.com/urqa/"; 
+	public static String	ServerAddress	= "http://ur-qa.com/urqa/";
 	
 
 }
