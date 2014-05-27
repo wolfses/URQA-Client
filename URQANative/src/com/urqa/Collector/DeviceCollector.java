@@ -149,7 +149,7 @@ public class DeviceCollector {
     static final int ERROR = -1;   
     
     static public boolean externalMemoryAvailable() {   
-        return android.os.Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);   
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
     }   
        
     static public long getAvailableInternalMemorySize() {   
