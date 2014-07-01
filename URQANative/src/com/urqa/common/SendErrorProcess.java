@@ -1,92 +1,89 @@
 package com.urqa.common;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.ParseException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
+import org.apache.http.params.HttpParams;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.util.Log;
 
 import com.urqa.Collector.ErrorReport;
-import com.urqa.common.JsonObj.ErrorSendData;
-import com.urqa.common.JsonObj.IDInstance;
 
-public class SendErrorProcess extends Thread{
-	private ErrorReport			   report;
-	private String 		   		   url;
-	
-	public SendErrorProcess(ErrorReport report,String url) 
-	{
-		// TODO Auto-generated constructor stub
-		this.report = report; 
+public class SendErrorProcess extends Thread {
+	private ErrorReport report;
+	private String url;
+
+	public SendErrorProcess(ErrorReport report) {
+		this(report, "client/send/exception");
+	}
+
+	public SendErrorProcess(ErrorReport report, String url) {
+		this.report = report;
 		this.url = url;
 	}
-	
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		try {
-			
-			
 			HttpClient client = new DefaultHttpClient();
+			setHttpParams(client.getParams());
+
 			HttpPost post = new HttpPost(StateData.ServerAddress + url);
-			
 			post.setHeader("Content-Type", "application/json; charset=utf-8");
-			client.getParams().setParameter("http.protocol.expect-continue", false);
-			client.getParams().setParameter("http.connection.timeout", 5000);
-			client.getParams().setParameter("http.socket.timeout", 5000);
-			
-			String test = report.ErrorData.toJson(); 
-			StringEntity input = new StringEntity(test,"UTF-8");
+			post.setEntity(toEntity(report));
 
-			post.setEntity(input);
-			HttpResponse responsePOST = client.execute(post);
-			HttpEntity resEntity = responsePOST.getEntity();
-			
-			if(StateData.TransferLog == false)
-				return;
+			HttpResponse response = client.execute(post);
 
-			String jsondata = "";
-			try {
-				jsondata = EntityUtils.toString(resEntity);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			IDInstance idinstance = new IDInstance();
-			idinstance.fromJson(jsondata);
-					
-			try {
-			   HttpClient logclient = new DefaultHttpClient();
-			   
-			   HttpPost logpost = new HttpPost( StateData.ServerAddress + 
-					   							"client/send/exception/log/"+ 
-					   							idinstance.idinstance);
+			int code = response.getStatusLine().getStatusCode();
+			Log.i("UrQA", String.format("UrQA Response Code :: %d", code));
 
-			   logclient.getParams().setParameter("http.protocol.expect-continue", false);
-			   logclient.getParams().setParameter("http.connection.timeout", 5000);
-			   logclient.getParams().setParameter("http.socket.timeout", 5000);
-			   
-			   // 1. 파일의 내용을 body 로 설정함 
-			   logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
-			   StringEntity entity = new StringEntity(report.LogData, "UTF-8");
-			   logpost.setEntity(entity);
-			   
-			   
-			   HttpResponse response = logclient.execute(logpost);
-			  } catch (Exception e) {
-					e.printStackTrace();
-				}
-					
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void setHttpParams(HttpParams params) {
+		params.setParameter("http.protocol.expect-continue", false);
+		params.setParameter("http.connection.timeout", 5000);
+		params.setParameter("http.socket.timeout", 5000);
+	}
+
+	private StringEntity toEntity(ErrorReport data) throws JSONException,
+			IOException {
+		final String DATA = setData(data);
+		return new StringEntity(DATA, "UTF-8");
+	}
+
+	private String setData(ErrorReport data) throws JSONException {
+		JSONObject object = new JSONObject();
+		object.put("console_log", getLog(data));
+		object.put("exception", data.ErrorData.toJSONObject());
+		object.put("instance", getId(data));
+		object.put("version", data.mUrQAVersion);
+		return object.toString();
+
+	}
+
+	private JSONObject getLog(ErrorReport data) throws JSONException {
+        JSONObject map = new JSONObject();
+        map.put("data", data.LogData);
+
+		return map;
+	}
+
+	private JSONObject getId(ErrorReport data) throws JSONException {
+        JSONObject map = new JSONObject();
+        map.put("id", data.mId);
+
+		return map;
 	}
 }
