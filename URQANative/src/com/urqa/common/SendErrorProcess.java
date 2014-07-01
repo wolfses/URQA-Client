@@ -44,11 +44,7 @@ public class SendErrorProcess extends Thread {
 			HttpResponse response = client.execute(post);
 
 			int code = response.getStatusLine().getStatusCode();
-			if (code > 400)
-				Log.i("UrQA", String.format("UrQA Response Code :: %d", code));
-			else {
-				Log.i("UrQA", String.format("UrQA Response Code :: %d", code));
-			}
+			Log.i("UrQA", String.format("UrQA Response Code :: %d", code));
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,7 +60,6 @@ public class SendErrorProcess extends Thread {
 	private StringEntity toEntity(ErrorReport data) throws JSONException,
 			IOException {
 		final String DATA = setData(data);
-//        Log.i("UrQA", String.format("UrQA Request Data :: \n %s", DATA));
 		return new StringEntity(DATA, "UTF-8");
 	}
 

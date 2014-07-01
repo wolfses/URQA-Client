@@ -38,7 +38,7 @@ public final class URQAController {
 
 	public static int NativeCrashCallback(String str) {
 
-		Log.e("URQATEST", "Dump Path : " + str);
+		//Log.e("UrQA", "Dump Path : " + str);
 		ErrorReport report = ErrorReportFactory
 				.CreateNativeErrorReport(StateData.AppContext);
 
@@ -49,10 +49,8 @@ public final class URQAController {
 		try {
 			errprocess.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// Log.e("URQATEST","value : " + str);
 
 		return 0;
 	}
@@ -83,11 +81,11 @@ public final class URQAController {
 					JSONObject object = new JSONObject(response);
 					StateData.SessionID = object.optString("idsession");
 				} catch (ParseException e) {
-					Log.e("UrQA", e.getMessage());
+					e.printStackTrace();
 				} catch (IOException e) {
-					Log.e("UrQA", e.getMessage());
+					e.printStackTrace();
 				} catch (JSONException e) {
-					Log.e("UrQA", e.getMessage());
+					e.printStackTrace();
 				}
 			}
 		}

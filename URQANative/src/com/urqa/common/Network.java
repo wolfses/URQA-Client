@@ -35,6 +35,7 @@ public class Network extends Thread {
 		mJson = json;
 		mMethod = method;
 	}
+
 	public void CallbackFunction(HttpResponse responseGet, HttpEntity resEntity) {
 
 	}
@@ -64,7 +65,7 @@ public class Network extends Thread {
 				CallbackFunction(responseGet, resEntityGet);
 			}
 		} catch (Exception e) {
-			Log.e("UrQA", e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -85,12 +86,12 @@ public class Network extends Thread {
 			HttpEntity resEntity = responsePOST.getEntity();
 
 			int code = responsePOST.getStatusLine().getStatusCode();
-			
+
 			Log.i("UrQA", String.format("UrQA Response Code : %d", code));
 
 			CallbackFunction(responsePOST, resEntity);
 		} catch (Exception e) {
-			Log.e("UrQA", e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

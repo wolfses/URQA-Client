@@ -1,7 +1,5 @@
 package com.urqa.library;
 
-import android.util.Log;
-
 import com.urqa.Collector.ErrorReport;
 import com.urqa.Collector.ErrorReportFactory;
 import com.urqa.common.SendErrorProcess;
@@ -38,7 +36,7 @@ public class UncaughtExceptionHandler implements
 			if (mUncaughtExceptionHandler != null)
 				mUncaughtExceptionHandler.uncaughtException(thread, ex);
 		} catch (Throwable e) {
-			Log.e("UrQA", e.getMessage());
+			e.printStackTrace();
 		} finally {
 			mDefaultExceptionHandler.uncaughtException(thread, ex);
 
