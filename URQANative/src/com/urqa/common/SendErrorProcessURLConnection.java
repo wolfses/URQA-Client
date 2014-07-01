@@ -66,43 +66,43 @@ public class SendErrorProcessURLConnection extends Thread{
 			HttpResponse responsePOST = client.execute(post);
 			HttpEntity resEntity = responsePOST.getEntity();
 
-			if (StateData.TransferLog == false)
-				return;
-
-			String jsondata = "";
-			try {
-				jsondata = EntityUtils.toString(resEntity);
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			idinstance = new IDInstance();
-			idinstance.fromJson(jsondata);
-					
-			try {
-				HttpClient logclient = new DefaultHttpClient();
-
-				HttpPost logpost = new HttpPost(StateData.ServerAddress
-						+ "client/send/exception/log/" + idinstance.idinstance);
-
-				logclient.getParams().setParameter(
-						"http.protocol.expect-continue", false);
-				logclient.getParams().setParameter("http.connection.timeout",
-						5000);
-				logclient.getParams().setParameter("http.socket.timeout", 5000);
-
-				// 1. 파일의 내용을 body 로 설정함
-				logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
-				StringEntity entity = new StringEntity(report.LogData, "UTF-8");
-				logpost.setEntity(entity);
-
-				HttpResponse response = logclient.execute(logpost);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+//			if (StateData.TransferLog == false)
+//				return;
+//
+//			String jsondata = "";
+//			try {
+//				jsondata = EntityUtils.toString(resEntity);
+//			} catch (ParseException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			idinstance = new IDInstance();
+//			idinstance.fromJson(jsondata);
+//
+//			try {
+//				HttpClient logclient = new DefaultHttpClient();
+//
+//				HttpPost logpost = new HttpPost(StateData.ServerAddress
+//						+ "client/send/exception/log/" + idinstance.idinstance);
+//
+//				logclient.getParams().setParameter(
+//						"http.protocol.expect-continue", false);
+//				logclient.getParams().setParameter("http.connection.timeout",
+//						30000);
+//				logclient.getParams().setParameter("http.socket.timeout", 30000);
+//
+//				// 1. 파일의 내용을 body 로 설정함
+//				logpost.setHeader("Content-Type", "text/plain; charset=utf-8");
+//				StringEntity entity = new StringEntity(report.LogData, "UTF-8");
+//				logpost.setEntity(entity);
+//
+//				HttpResponse response = logclient.execute(logpost);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
