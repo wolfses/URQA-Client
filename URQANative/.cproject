@@ -13,7 +13,7 @@
 					<folderInfo id="cdt.managedbuild.config.gnu.cygwin.exe.debug.634944285." name="/" resourcePath="">
 						<toolChain errorParsers="" id="cdt.managedbuild.toolchain.gnu.cygwin.base.2035176451" name="Cygwin GCC" superClass="cdt.managedbuild.toolchain.gnu.cygwin.base">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.Cygwin_PE" id="cdt.managedbuild.target.gnu.platform.cygwin.base.285884125" name="Debug Platform" osList="win32" superClass="cdt.managedbuild.target.gnu.platform.cygwin.base"/>
-							<builder arguments="" autoBuildTarget="" buildPath="${workspace_loc:/URQANative/}" command="ndk-build" enableAutoBuild="true" errorParsers="" id="com.android.builder.282778607" incrementalBuildTarget="" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Android Builder" superClass="com.android.builder"/>
+							<builder arguments="DEBUG=1" autoBuildTarget="" buildPath="${workspace_loc:/URQANative/}" command="ndk-build" enableAutoBuild="true" errorParsers="" id="com.android.builder.282778607" incrementalBuildTarget="" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Android Builder" superClass="com.android.builder"/>
 							<tool errorParsers="" id="cdt.managedbuild.tool.gnu.assembler.cygwin.base.815739732" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.cygwin.base">
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1635196674" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -91,13 +91,8 @@
 		<project id="URQANative.cdt.managedbuild.target.gnu.cygwin.exe.677378514" name="Executable" projectType="cdt.managedbuild.target.gnu.cygwin.exe"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.pathentry"/>
-	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="Release">
-			<resource resourceType="PROJECT" workspacePath="/URQANative"/>
-		</configuration>
-		<configuration configurationName="Debug">
-			<resource resourceType="PROJECT" workspacePath="/URQANative"/>
-		</configuration>
+	<storageModule moduleId="refreshScope" versionNumber="1">
+		<resource resourceType="PROJECT" workspacePath="/URQANative"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
